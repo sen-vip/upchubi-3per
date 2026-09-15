@@ -1,0 +1,1114 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#147D73" />
+  <meta name="description" content="학교운영경비 대비 일반업무추진비 3% 이내 편성 여부를 확인하는 실무도구" />
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+  <title>업추비 3% | 업무추진비 편성 체크</title>
+  <style>
+:root {
+  font-family: Pretendard, "Noto Sans KR", "Apple SD Gothic Neo", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #253332;
+  background: #f6f8f7;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --primary: #147d73;
+  --primary-dark: #0f625b;
+  --soft: #eff8f6;
+  --border: #d8e6e3;
+  --text: #253332;
+  --muted: #71807e;
+  --ok: #168565;
+  --danger: #c84b45;
+  --white: #ffffff;
+  --shadow: 0 12px 28px rgba(29, 62, 57, 0.055);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; min-width: 320px; min-height: 100vh; background: #f6f8f7; color: var(--text); }
+button, input { font: inherit; }
+button { color: inherit; }
+svg { display: block; }
+
+.page-shell { max-width: 1180px; margin: 0 auto; padding: 0 28px 36px; }
+.topbar { height: 72px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(216, 230, 227, .85); }
+.brand { display: inline-flex; align-items: center; gap: 10px; color: var(--primary-dark); font-weight: 800; text-decoration: none; letter-spacing: -.02em; }
+.brand-mark { width: 35px; height: 35px; color: var(--primary); }
+.ghost-button { min-height: 40px; padding: 0 14px; border: 1px solid var(--border); border-radius: 10px; background: rgba(255,255,255,.78); color: #566663; font-size: 13px; font-weight: 700; cursor: pointer; }
+.ghost-button:hover { border-color: #b9d2cd; background: white; }
+
+main { padding-top: 56px; }
+.hero { max-width: 720px; margin-bottom: 30px; }
+.hero-kicker { margin-bottom: 12px; color: var(--primary); font-size: 13px; font-weight: 800; letter-spacing: .08em; }
+.hero h1 { margin: 0; font-size: clamp(34px, 5vw, 52px); line-height: 1.08; letter-spacing: -.045em; }
+.hero h1 span { color: var(--primary); }
+.hero p { margin: 15px 0 0; color: var(--muted); font-size: 17px; line-height: 1.7; letter-spacing: -.02em; }
+
+.path-card { display: grid; grid-template-columns: 44px 1fr; gap: 17px; margin: 0 0 38px; padding: 22px 24px; border: 1px solid var(--border); border-radius: 18px; background: linear-gradient(135deg, #f6fcfa, #ffffff); box-shadow: 0 4px 16px rgba(22, 76, 67, .035); }
+.path-icon { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 13px; color: var(--primary); background: #e7f5f2; }
+.path-icon svg, .drop-icon svg, .privacy-note svg, .criteria-toggle svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.path-heading-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.path-heading-row h2 { margin: 0; font-size: 17px; letter-spacing: -.025em; }
+.path-badge { display: inline-flex; align-items: center; min-height: 24px; padding: 0 8px; border-radius: 999px; background: #dff2ee; color: var(--primary-dark); font-size: 11px; font-weight: 800; }
+.breadcrumb { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; margin-top: 10px; color: #5d6e6b; font-size: 14px; line-height: 1.7; }
+.breadcrumb b { color: #9badab; font-weight: 700; }
+.breadcrumb strong { color: var(--primary-dark); font-weight: 800; }
+.download-tabs { display: flex; gap: 10px 24px; flex-wrap: wrap; margin-top: 13px; }
+.download-tabs > div { display: inline-flex; align-items: center; gap: 8px; color: #687875; font-size: 13px; }
+.tab-chip { padding: 5px 9px; border: 1px solid #c9e2dd; border-radius: 8px; background: white; color: var(--primary-dark); font-weight: 800; }
+
+.upload-section { padding-top: 2px; }
+.section-heading { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 16px; }
+.section-heading > div { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.section-step { display: inline-flex; min-width: 34px; height: 24px; padding: 0 8px; align-items: center; justify-content: center; border-radius: 7px; background: #e6f3f1; color: var(--primary-dark); font-size: 11px; font-weight: 900; letter-spacing: .04em; }
+.section-heading h2 { margin: 0; font-size: 20px; letter-spacing: -.03em; }
+.section-heading p { margin: 0; max-width: 460px; color: var(--muted); font-size: 13px; line-height: 1.55; text-align: right; }
+
+.upload-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.upload-card { padding: 18px; border: 1px solid #dce8e5; border-radius: 18px; background: #fff; box-shadow: var(--shadow); }
+.upload-card-head { display: flex; align-items: center; gap: 11px; padding: 2px 2px 14px; }
+.upload-number { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 9px; background: #edf7f5; color: var(--primary); font-weight: 900; font-size: 13px; }
+.upload-card h3 { margin: 0; font-size: 16px; letter-spacing: -.025em; }
+.upload-card-head p { margin: 3px 0 0; color: var(--muted); font-size: 12px; }
+.drop-zone { min-height: 162px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 20px; border: 1.5px dashed #bdd8d3; border-radius: 14px; background: #f9fcfb; color: #667673; cursor: pointer; transition: border-color .18s ease, background .18s ease, transform .18s ease; outline: none; }
+.drop-zone:hover, .drop-zone:focus-visible, .drop-zone.is-dragging { border-color: var(--primary); background: #f1faf8; }
+.drop-zone.is-dragging { transform: translateY(-2px); }
+.drop-zone.is-loading { opacity: .68; pointer-events: none; }
+.drop-icon { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 12px; background: #e9f5f2; color: var(--primary); }
+.drop-zone strong { color: #354541; font-size: 14px; }
+.drop-zone > span { font-size: 11px; color: #94a29f; }
+.file-status { min-height: 0; margin-top: 12px; }
+.status-ok { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 10px; align-items: center; padding: 10px 11px; border-radius: 11px; background: #f1f9f7; }
+.status-check { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; background: #d9efe9; color: var(--ok); font-weight: 900; }
+.status-ok div { min-width: 0; }
+.status-ok strong { display: block; color: #34564e; font-size: 12px; }
+.status-ok span:last-child { display: block; margin-top: 2px; color: #788885; font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.privacy-note { display: flex; align-items: center; justify-content: center; gap: 7px; margin: 14px 0 0; color: #7d8b89; font-size: 11.5px; }
+.privacy-note svg { width: 15px; height: 15px; }
+
+.message-area { margin-top: 14px; }
+.notice { padding: 12px 14px; border: 1px solid #d8e6e3; border-radius: 11px; background: #fff; color: #61716e; font-size: 13px; line-height: 1.55; }
+.notice.error { border-color: #efd0cd; background: #fff7f6; color: #a1433d; }
+.notice.info { border-color: #cde3df; background: #f3faf8; color: #3c6b63; }
+
+.result-section { scroll-margin-top: 16px; margin-top: 52px; }
+.is-hidden { display: none !important; }
+.result-heading { margin-bottom: 18px; }
+.result-hero { position: relative; padding: 26px 28px 24px; border: 1px solid #d8e6e3; border-radius: 20px; background: linear-gradient(145deg, #ffffff 0%, #f6fbfa 100%); box-shadow: 0 14px 36px rgba(27, 67, 60, .065); overflow: hidden; }
+.result-hero::after { content: ''; position: absolute; width: 180px; height: 180px; border-radius: 50%; top: -100px; right: -65px; background: rgba(20, 125, 115, .055); }
+.result-hero.over { border-color: #ecc8c5; background: linear-gradient(145deg, #fff 0%, #fff8f7 100%); }
+.result-hero.over::after { background: rgba(200, 75, 69, .055); }
+.result-topline { position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; color: #60716e; font-size: 13px; font-weight: 800; }
+.verdict { padding: 6px 10px; border-radius: 999px; background: #e4f4ef; color: var(--ok); font-size: 12px; }
+.over .verdict { background: #fbe6e4; color: var(--danger); }
+.result-ratio { position: relative; z-index: 1; margin-top: 14px; color: var(--primary-dark); font-size: clamp(56px, 8vw, 78px); line-height: 1; font-weight: 850; letter-spacing: -.055em; font-variant-numeric: tabular-nums; }
+.over .result-ratio { color: #a63f39; }
+.result-ratio small { margin-left: 6px; font-size: .37em; font-weight: 800; letter-spacing: -.02em; }
+.result-summary { position: relative; z-index: 1; margin: 13px 0 21px; color: #697976; font-size: 14px; }
+.result-summary strong { color: #304541; }
+.over .result-summary strong { color: var(--danger); }
+.progress-wrap { position: relative; z-index: 1; max-width: 620px; }
+.progress-track { position: relative; height: 8px; border-radius: 999px; background: #e5ecea; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: inherit; background: var(--primary); }
+.over .progress-fill { background: var(--danger); }
+.progress-labels { display: flex; justify-content: space-between; margin-top: 7px; color: #94a29f; font-size: 10px; font-variant-numeric: tabular-nums; }
+.rounding-warning { position: relative; z-index: 1; margin: 13px 0 0; padding-top: 12px; border-top: 1px solid #f0d9d7; color: #9b4b45; font-size: 12px; line-height: 1.55; }
+
+.metrics-card { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 14px; padding: 6px 0; border: 1px solid #dce8e5; border-radius: 16px; background: #fff; }
+.metric { min-width: 0; padding: 18px 22px; border-right: 1px solid #e7efed; }
+.metric:last-child { border-right: 0; }
+.metric span { display: block; color: #7e8d8a; font-size: 12px; font-weight: 700; }
+.metric strong { display: block; margin-top: 7px; color: #263a36; font-size: clamp(18px, 2.3vw, 24px); letter-spacing: -.035em; text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.metric small { display: block; margin-top: 4px; color: #8b9996; font-size: 11px; text-align: right; }
+.metric.featured strong { color: var(--primary-dark); }
+
+.formula-card { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 12px; padding: 13px 16px; border-radius: 12px; background: #eef4f2; color: #687875; }
+.formula-card span { font-size: 11px; font-weight: 800; }
+.formula-card strong { color: #435650; font-size: 12.5px; font-variant-numeric: tabular-nums; text-align: right; }
+.details-stack { display: grid; gap: 10px; margin-top: 22px; }
+details { border: 1px solid #dce8e5; border-radius: 14px; background: #fff; overflow: hidden; }
+summary { min-height: 72px; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 15px 18px; cursor: pointer; list-style: none; }
+summary::-webkit-details-marker { display: none; }
+summary > span:first-child { min-width: 0; }
+summary strong { display: block; font-size: 14px; }
+summary small { display: block; margin-top: 4px; color: #879592; font-size: 11.5px; }
+.summary-action { flex: 0 0 auto; color: var(--primary); font-size: 11px; font-weight: 800; }
+details[open] .summary-action { font-size: 0; }
+details[open] .summary-action::after { content: '접기'; font-size: 11px; }
+.detail-body { padding: 0 18px 18px; border-top: 1px solid #edf2f1; }
+.detail-table { padding-top: 6px; }
+.detail-row { display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: center; min-height: 43px; border-bottom: 1px solid #edf2f1; font-size: 12.5px; }
+.detail-row span { color: #5e6f6c; }
+.detail-row strong { color: #324440; font-variant-numeric: tabular-nums; text-align: right; }
+.detail-row.total { min-height: 50px; border-bottom: 0; }
+.detail-row.total span, .detail-row.total strong { color: var(--primary-dark); font-weight: 900; }
+.detail-note { margin: 4px 0 0; padding: 11px 12px; border-radius: 10px; background: #f4f8f7; color: #71817e; font-size: 11.5px; line-height: 1.6; }
+.expense-detail { padding-top: 14px; }
+.rule-line { display: grid; grid-template-columns: 54px 1fr; gap: 12px; align-items: start; padding: 10px 0; font-size: 12px; }
+.rule-line + .rule-line { border-top: 1px solid #edf2f1; }
+.rule-line span { width: 44px; min-height: 24px; display: inline-grid; place-items: center; border-radius: 7px; font-size: 10px; font-weight: 900; }
+.rule-line.include span { background: #e5f4ef; color: var(--ok); }
+.rule-line.exclude span { background: #f5f0ef; color: #8b6966; }
+.rule-line strong { color: #536360; line-height: 1.65; }
+
+
+.result-guidance {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+  margin-top: 16px;
+  padding: 14px 16px;
+  border: 1px solid #dce8e5;
+  border-radius: 13px;
+  background: #f6faf9;
+  color: #6f7f7c;
+}
+.result-guidance .guidance-icon {
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #e6f3f1;
+  color: var(--primary-dark);
+  font-size: 12px;
+  font-weight: 900;
+}
+.result-guidance strong {
+  display: block;
+  margin-bottom: 3px;
+  color: #4d625d;
+  font-size: 11.5px;
+}
+.result-guidance p {
+  margin: 0;
+  font-size: 11.5px;
+  line-height: 1.65;
+}
+
+.criteria-card { margin-top: 42px; border: 1px solid #dce8e5; border-radius: 16px; background: rgba(255,255,255,.78); overflow: hidden; }
+.criteria-toggle { width: 100%; min-height: 66px; display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 14px 18px; border: 0; background: transparent; cursor: pointer; }
+.criteria-toggle > span { display: flex; align-items: center; gap: 10px; text-align: left; }
+.criteria-toggle strong { font-size: 13px; }
+.criteria-toggle svg { width: 18px; height: 18px; color: #83928f; transition: transform .18s ease; }
+.criteria-toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
+.criteria-body { display: grid; grid-template-columns: 1.25fr .75fr; gap: 34px; padding: 20px 20px 22px; border-top: 1px solid #e5eeec; }
+.criteria-body h3 { margin: 0 0 6px; font-size: 13px; }
+.criteria-body p { margin: 0; color: #71817e; font-size: 11.5px; line-height: 1.65; }
+.criteria-body .muted { margin-top: 8px; color: #91807e; }
+.pill-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.pill-list span { padding: 5px 8px; border: 1px solid #d9e7e4; border-radius: 8px; background: #fff; color: #60706d; font-size: 10.5px; }
+
+footer { display: flex; justify-content: space-between; margin-top: 42px; padding: 20px 2px 4px; border-top: 1px solid #e2eae8; color: #98a4a2; font-size: 10.5px; }
+
+.app-title { display: inline-flex; align-items: center; gap: 11px; min-width: 0; color: var(--primary-dark); }
+.app-title-copy { display: grid; gap: 2px; min-width: 0; }
+.app-title-copy strong { font-size: 17px; line-height: 1.15; letter-spacing: -.03em; }
+.app-title-copy small { color: #788885; font-size: 10.5px; font-weight: 700; letter-spacing: -.01em; }
+.topbar-actions { display: flex; align-items: center; gap: 8px; }
+.version-badge { display: inline-flex; align-items: center; min-height: 30px; padding: 0 9px; border: 1px solid #d8e6e3; border-radius: 999px; background: #f4f9f7; color: #71807e; font-size: 10.5px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.help-button { color: var(--primary-dark); background: #f4faf8; border-color: #cfe3df; }
+.compact-hero { max-width: 790px; margin-bottom: 26px; }
+.compact-hero h1 { font-size: clamp(30px, 4.4vw, 45px); }
+body.modal-open { overflow: hidden; }
+.modal-backdrop { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; padding: 22px; background: rgba(28, 42, 39, .46); backdrop-filter: blur(4px); }
+.help-modal { width: min(920px, 100%); max-height: min(88vh, 900px); display: flex; flex-direction: column; border: 1px solid #dbe8e5; border-radius: 22px; background: #fff; box-shadow: 0 28px 70px rgba(25, 57, 51, .22); overflow: hidden; }
+.help-modal-head { flex: 0 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 20px 22px 17px; border-bottom: 1px solid #e8efed; }
+.help-eyebrow { display: block; margin-bottom: 4px; color: var(--primary); font-size: 10.5px; font-weight: 900; letter-spacing: .08em; }
+.help-modal-head h2 { margin: 0; font-size: 20px; letter-spacing: -.035em; }
+.icon-button { width: 38px; height: 38px; display: grid; place-items: center; flex: 0 0 auto; border: 1px solid #dde8e6; border-radius: 11px; background: #f8fbfa; color: #697a77; font-size: 24px; line-height: 1; cursor: pointer; }
+.icon-button:hover { background: #eef6f4; color: var(--primary-dark); }
+.help-modal-body { flex: 1 1 auto; overflow: auto; padding: 6px 22px 10px; }
+.help-section { display: grid; grid-template-columns: 42px minmax(0, 1fr); gap: 15px; padding: 20px 0; border-bottom: 1px solid #edf2f1; }
+.help-section:last-child { border-bottom: 0; }
+.help-step { width: 36px; height: 26px; display: grid; place-items: center; border-radius: 8px; background: #eaf6f3; color: var(--primary-dark); font-size: 10px; font-weight: 900; letter-spacing: .05em; }
+.help-section h3 { margin: 1px 0 8px; font-size: 15px; letter-spacing: -.025em; }
+.help-section p { margin: 0; color: #6d7e7b; font-size: 12.5px; line-height: 1.7; }
+.help-path { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 11px 0; padding: 11px 12px; border-radius: 10px; background: #f2f8f6; color: #586966; font-size: 12px; line-height: 1.7; }
+.help-path b { color: #a4b1ae; }
+.help-path strong { color: var(--primary-dark); }
+.help-file-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-bottom: 14px; }
+.help-file-grid > div { display: grid; gap: 3px; padding: 11px 12px; border: 1px solid #e0ebe8; border-radius: 11px; background: #fff; }
+.help-file-grid strong { color: #40544f; font-size: 12px; }
+.help-file-grid span { color: #879591; font-size: 10.5px; }
+.help-figure { margin: 0; padding: 9px; border: 1px solid #dfe9e7; border-radius: 13px; background: #f8fbfa; }
+.help-figure img { width: 100%; height: auto; display: block; border-radius: 8px; border: 1px solid #e2e8e7; }
+.help-figure figcaption { margin-top: 8px; color: #7f8e8b; font-size: 10.5px; line-height: 1.55; }
+.help-rule-box { margin-top: 9px; padding: 12px 13px; border: 1px solid #e1ebe9; border-radius: 11px; background: #fbfdfc; }
+.help-rule-box > strong { display: block; margin-bottom: 5px; color: #40534f; font-size: 11.5px; }
+.help-rule-box p { font-size: 11.5px; }
+.help-callout { margin-top: 10px !important; padding: 10px 12px; border-radius: 10px; background: #fff7ee; color: #8a6840 !important; }
+.help-modal-foot { flex: 0 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 13px 20px; border-top: 1px solid #e8efed; background: #fbfdfc; }
+.help-modal-foot span { color: #96a29f; font-size: 10.5px; }
+.primary-button { min-height: 38px; padding: 0 18px; border: 0; border-radius: 10px; background: var(--primary); color: white; font-size: 12px; font-weight: 800; cursor: pointer; }
+.primary-button:hover { background: var(--primary-dark); }
+footer strong { color: #7d8a88; font-weight: 800; }
+
+@media (max-width: 760px) {
+  .page-shell { padding: 0 18px 28px; }
+  .topbar { height: auto; min-height: 68px; gap: 12px; padding: 10px 0; }
+  .app-title-copy small { display: none; }
+  .version-badge { display: none; }
+  .topbar-actions { gap: 6px; }
+  .topbar-actions .ghost-button { min-height: 38px; padding-inline: 11px; }
+  main { padding-top: 38px; }
+  .hero { margin-bottom: 24px; }
+  .hero p { font-size: 15px; }
+  .path-card { grid-template-columns: 38px 1fr; padding: 17px 16px; border-radius: 15px; }
+  .path-icon { width: 38px; height: 38px; border-radius: 11px; }
+  .breadcrumb { gap: 5px; font-size: 12px; }
+  .download-tabs { display: grid; gap: 7px; }
+  .section-heading { align-items: flex-start; flex-direction: column; gap: 8px; }
+  .section-heading p { text-align: left; }
+  .upload-grid { grid-template-columns: 1fr; }
+  .drop-zone { min-height: 140px; }
+  .result-section { margin-top: 42px; }
+  .result-hero { padding: 22px 20px; }
+  .metrics-card { grid-template-columns: 1fr; padding: 0; }
+  .metric { padding: 15px 18px; border-right: 0; border-bottom: 1px solid #e7efed; }
+  .metric:last-child { border-bottom: 0; }
+  .metric strong { font-size: 21px; }
+  .formula-card { align-items: flex-start; flex-direction: column; gap: 5px; }
+  .formula-card strong { text-align: left; line-height: 1.55; }
+  summary { min-height: 68px; padding: 14px; }
+  .detail-body { padding: 0 14px 14px; }
+  .detail-row { min-height: 40px; }
+  .criteria-body { grid-template-columns: 1fr; gap: 20px; }
+  .privacy-note { align-items: flex-start; text-align: left; justify-content: flex-start; padding: 0 3px; }
+  .modal-backdrop { align-items: end; padding: 0; }
+  .help-modal { width: 100%; max-height: 92vh; border-radius: 20px 20px 0 0; border-bottom: 0; }
+  .help-modal-head { padding: 17px 18px 14px; }
+  .help-modal-body { padding-inline: 18px; }
+  .help-section { grid-template-columns: 36px minmax(0, 1fr); gap: 10px; padding: 17px 0; }
+  .help-file-grid { grid-template-columns: 1fr; }
+  .help-modal-foot { padding: 11px 16px; }
+}
+
+@media (max-width: 420px) {
+  .page-shell { padding-inline: 14px; }
+  .ghost-button { padding-inline: 9px; }
+  .brand-mark { width: 32px; height: 32px; }
+  .app-title-copy strong { font-size: 15px; }
+  .topbar-actions .ghost-button { font-size: 11px; }
+  .hero h1 { font-size: 34px; }
+  .path-card { grid-template-columns: 1fr; }
+  .path-icon { display: none; }
+  .result-ratio { font-size: 58px; }
+  .metric strong { white-space: normal; }
+}
+
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <script>
+const OPERATING_INCOME_ITEMS = [
+  '학교운영비전입금',
+  '사용료',
+  '수수료',
+  '자산매각대',
+  '지난년도수입',
+  '이자수입',
+  '기타행정활동수입',
+  '순세계잉여금',
+];
+
+const GENERAL_EXPENSE_CODE = 'B200101';
+
+function normalizeText(value) {
+  return String(value ?? '')
+    .replace(/[\n\r\t]/g, '')
+    .replace(/\s+/g, '')
+    .replace(/[·ㆍ]/g, '·')
+    .trim();
+}
+
+function toWon(value) {
+  if (typeof value === 'number' && Number.isFinite(value)) return Math.round(value);
+  if (value === null || value === undefined || value === '') return 0;
+  const normalized = String(value)
+    .replace(/,/g, '')
+    .replace(/원/g, '')
+    .replace(/\s+/g, '')
+    .trim();
+  if (!normalized) return 0;
+  const parsed = Number(normalized);
+  if (!Number.isFinite(parsed)) {
+    throw new Error(`금액을 숫자로 읽지 못했습니다: ${value}`);
+  }
+  return Math.round(parsed);
+}
+
+function formatWon(value) {
+  return `${Math.round(value).toLocaleString('ko-KR')}원`;
+}
+
+function formatSmallWon(value) {
+  const n = Math.round(value);
+  if (n === 0) return '';
+  if (n % 1000 === 0 && n < 10000) return `${n / 1000}천원`;
+  if (n % 100 === 0 && n < 1000) return `${n / 100}백원`;
+  if (n % 10 === 0 && n < 100) return `${n / 10}십원`;
+  return `${n.toLocaleString('ko-KR')}원`;
+}
+
+function formatKoreanMoney(value) {
+  const n = Math.max(0, Math.round(value));
+  if (n === 0) return '0원';
+
+  const eok = Math.floor(n / 100000000);
+  const afterEok = n % 100000000;
+  const man = Math.floor(afterEok / 10000);
+  const rest = afterEok % 10000;
+  const parts = [];
+
+  if (eok > 0) parts.push(`${eok.toLocaleString('ko-KR')}억`);
+  if (man > 0) parts.push(`${man.toLocaleString('ko-KR')}만`);
+  const restText = formatSmallWon(rest);
+  if (restText) parts.push(restText);
+
+  return parts.join(' ');
+}
+
+function calculateStatus(operatingBudget, generalExpense) {
+  const denominator = Math.round(operatingBudget);
+  const numerator = Math.round(generalExpense);
+
+  if (!Number.isFinite(denominator) || denominator <= 0) {
+    throw new Error('학교운영경비가 0원이거나 올바른 숫자가 아닙니다.');
+  }
+  if (!Number.isFinite(numerator) || numerator < 0) {
+    throw new Error('일반업무추진비가 올바른 숫자가 아닙니다.');
+  }
+
+  // 원 단위 예산에서 3% 이하로 편성 가능한 최대 정수 금액.
+  const maxAllowed = Math.floor((denominator * 3) / 100);
+  const isCompliant = numerator <= maxAllowed;
+  const difference = isCompliant ? maxAllowed - numerator : numerator - maxAllowed;
+  const ratio = (numerator / denominator) * 100;
+
+  return {
+    operatingBudget: denominator,
+    generalExpense: numerator,
+    maxAllowed,
+    isCompliant,
+    difference,
+    ratio,
+  };
+}
+
+
+function findHeaderRow(rows, requiredHeaders) {
+  return rows.findIndex((row) => {
+    const normalized = (row || []).map(normalizeText);
+    return requiredHeaders.every((header) => normalized.includes(normalizeText(header)));
+  });
+}
+
+function headerMap(row) {
+  const map = new Map();
+  (row || []).forEach((cell, index) => {
+    const key = normalizeText(cell);
+    if (key && !map.has(key)) map.set(key, index);
+  });
+  return map;
+}
+
+function getIndex(map, aliases) {
+  for (const alias of aliases) {
+    const idx = map.get(normalizeText(alias));
+    if (idx !== undefined) return idx;
+  }
+  return -1;
+}
+
+function classifyRows(rows) {
+  const incomeHeader = findHeaderRow(rows, ['원가통계비목', '예산액']);
+  const expenseHeader = findHeaderRow(rows, ['세출목', '원가통계비목명', '예산액']);
+
+  if (expenseHeader >= 0) return { type: 'expense', headerRow: expenseHeader };
+  if (incomeHeader >= 0) return { type: 'income', headerRow: incomeHeader };
+  return { type: 'unknown', headerRow: -1 };
+}
+
+function extractIncome(rows) {
+  const headerRow = findHeaderRow(rows, ['원가통계비목', '예산액']);
+  if (headerRow < 0) {
+    throw new Error('세입실적 파일에서 원가통계비목과 예산액 열을 찾지 못했습니다.');
+  }
+
+  const map = headerMap(rows[headerRow]);
+  const nameIndex = getIndex(map, ['원가통계비목', '원가통계비목명']);
+  const codeIndex = getIndex(map, ['원가통계비목코드', '원가통계비목 코드']);
+  const budgetIndex = getIndex(map, ['예산액']);
+
+  if (nameIndex < 0 || budgetIndex < 0) {
+    throw new Error('세입실적 파일의 필요한 열을 찾지 못했습니다.');
+  }
+
+  const targets = new Map(OPERATING_INCOME_ITEMS.map((name) => [name, 0]));
+  const matched = new Map(OPERATING_INCOME_ITEMS.map((name) => [name, 0]));
+
+  for (let i = headerRow + 1; i < rows.length; i += 1) {
+    const row = rows[i] || [];
+    const name = normalizeText(row[nameIndex]);
+    if (!name || name === '합계') continue;
+    if (!targets.has(name)) continue;
+
+    const amount = toWon(row[budgetIndex]);
+    targets.set(name, targets.get(name) + amount);
+    matched.set(name, matched.get(name) + 1);
+  }
+
+  const total = [...targets.values()].reduce((sum, value) => sum + value, 0);
+  if (total <= 0) {
+    throw new Error('세입실적 파일에서 학교운영경비 항목을 찾지 못했거나 합계가 0원입니다.');
+  }
+
+  return {
+    total,
+    items: OPERATING_INCOME_ITEMS.map((name) => ({
+      name,
+      amount: targets.get(name),
+      matchedRows: matched.get(name),
+    })),
+    meta: {
+      headerRow,
+      nameIndex,
+      codeIndex,
+      budgetIndex,
+    },
+  };
+}
+
+function extractExpense(rows) {
+  const headerRow = findHeaderRow(rows, ['세출목', '원가통계비목명', '예산액']);
+  if (headerRow < 0) {
+    throw new Error('성질별 세출실적 파일에서 필요한 열을 찾지 못했습니다.');
+  }
+
+  const map = headerMap(rows[headerRow]);
+  const seMokIndex = getIndex(map, ['세출목']);
+  const detailIndex = getIndex(map, ['세출세목명']);
+  const nameIndex = getIndex(map, ['원가통계비목명', '원가통계비목']);
+  const codeIndex = getIndex(map, ['원가통계비목코드', '원가통계비목 코드']);
+  const budgetIndex = getIndex(map, ['예산액']);
+
+  if (nameIndex < 0 || budgetIndex < 0) {
+    throw new Error('성질별 세출실적 파일의 원가통계비목명 또는 예산액 열을 찾지 못했습니다.');
+  }
+
+  let amount = 0;
+  let matchedRows = 0;
+  let fallbackRows = 0;
+
+  for (let i = headerRow + 1; i < rows.length; i += 1) {
+    const row = rows[i] || [];
+    const code = codeIndex >= 0 ? normalizeText(row[codeIndex]).toUpperCase() : '';
+    const name = normalizeText(row[nameIndex]);
+    const seMok = seMokIndex >= 0 ? normalizeText(row[seMokIndex]) : '';
+    const detail = detailIndex >= 0 ? normalizeText(row[detailIndex]) : '';
+
+    const codeMatch = code === GENERAL_EXPENSE_CODE;
+    const nameFallback =
+      !code &&
+      seMok === '업무추진비' &&
+      detail === '일반업무추진비' &&
+      name === '일반업무추진비';
+
+    if (!codeMatch && !nameFallback) continue;
+
+    amount += toWon(row[budgetIndex]);
+    matchedRows += 1;
+    if (nameFallback) fallbackRows += 1;
+  }
+
+  if (matchedRows === 0) {
+    throw new Error('성질별 세출실적 파일에서 일반업무추진비(B200101)를 찾지 못했습니다.');
+  }
+
+  return {
+    amount,
+    matchedRows,
+    fallbackRows,
+    meta: {
+      headerRow,
+      seMokIndex,
+      detailIndex,
+      nameIndex,
+      codeIndex,
+      budgetIndex,
+    },
+  };
+}
+
+
+const app = document.querySelector('#app');
+
+const state = {
+  income: null,
+  expense: null,
+  errors: [],
+};
+
+app.innerHTML = `
+  <div class="page-shell">
+    <header class="topbar">
+      <div class="app-title" aria-label="업추비 3%">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 44 44" role="img">
+            <rect x="1" y="1" width="42" height="42" rx="13" fill="currentColor" opacity=".10"/>
+            <path d="M9.5 12.5l4.1 19 4.8-14.8 4.7 14.8 4.2-19M8.7 19.8h19.4M9.3 24.6h18.1" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="31" cy="31" r="8.5" fill="#fff"/>
+            <path d="M26.7 31.1l2.6 2.6 5.1-5.3" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="app-title-copy">
+          <strong>업추비 3%</strong>
+          <small>업무추진비 편성 체크</small>
+        </span>
+      </div>
+      <div class="topbar-actions">
+        <span class="version-badge" title="현재 버전">v0.1.3</span>
+        <button class="ghost-button help-button" id="helpButton" type="button" aria-haspopup="dialog">도움말</button>
+        <button class="ghost-button" id="resetButton" type="button">처음부터</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero compact-hero">
+        <div class="hero-kicker">업로드 → 계산 → 판정</div>
+        <h1>현재 자료로 <span>3% 이내</span>인지 확인해요</h1>
+        <p>세입실적과 성질별 세출실적 두 파일만 올리면 학교운영경비와 일반업무추진비를 자동으로 읽어 계산합니다.</p>
+      </section>
+
+      <section class="path-card" aria-labelledby="downloadPathTitle">
+        <div class="path-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M12 3v11m0 0 4-4m-4 4-4-4M5 18.5h14"/></svg>
+        </div>
+        <div class="path-content">
+          <div class="path-heading-row">
+            <h2 id="downloadPathTitle">파일은 여기서 내려받아요</h2>
+            <span class="path-badge">에듀파인</span>
+          </div>
+          <div class="breadcrumb" aria-label="다운로드 경로">
+            <span>학교회계</span><b>›</b><span>예산결산</span><b>›</b><span>결산현황</span><b>›</b><span>집행실적</span><b>›</b><strong>엑셀저장(마감)</strong>
+          </div>
+          <div class="download-tabs">
+            <div><span class="tab-chip">[세입실적] 탭</span><span>세입 파일</span></div>
+            <div><span class="tab-chip">[성질별 세출실적] 탭</span><span>세출 파일</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="upload-section" aria-labelledby="uploadTitle">
+        <div class="section-heading">
+          <div>
+            <span class="section-step">01</span>
+            <h2 id="uploadTitle">엑셀 파일 2개를 올려주세요</h2>
+          </div>
+          <p>파일명이나 월 표기는 보지 않고, 파일 안의 항목을 읽어 자동 판별합니다.</p>
+        </div>
+
+        <div class="upload-grid">
+          <article class="upload-card" data-slot="income">
+            <div class="upload-card-head">
+              <div class="upload-number">1</div>
+              <div>
+                <h3>세입실적</h3>
+                <p>학교운영경비 계산용</p>
+              </div>
+            </div>
+            <div class="drop-zone" data-drop="income" tabindex="0" role="button" aria-label="세입실적 엑셀 파일 선택">
+              <input type="file" accept=".xlsx,.xls" data-input="income" hidden />
+              <div class="drop-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M12 16V5m0 0-4 4m4-4 4 4M5 19h14"/></svg>
+              </div>
+              <strong>파일을 놓거나 선택하세요</strong>
+              <span>.xlsx · .xls</span>
+            </div>
+            <div class="file-status" data-status="income"></div>
+          </article>
+
+          <article class="upload-card" data-slot="expense">
+            <div class="upload-card-head">
+              <div class="upload-number">2</div>
+              <div>
+                <h3>성질별 세출실적</h3>
+                <p>일반업무추진비 계산용</p>
+              </div>
+            </div>
+            <div class="drop-zone" data-drop="expense" tabindex="0" role="button" aria-label="성질별 세출실적 엑셀 파일 선택">
+              <input type="file" accept=".xlsx,.xls" data-input="expense" hidden />
+              <div class="drop-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M12 16V5m0 0-4 4m4-4 4 4M5 19h14"/></svg>
+              </div>
+              <strong>파일을 놓거나 선택하세요</strong>
+              <span>.xlsx · .xls</span>
+            </div>
+            <div class="file-status" data-status="expense"></div>
+          </article>
+        </div>
+
+        <p class="privacy-note">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 10V7a4 4 0 0 1 8 0v3m-9 0h10v9H7z"/></svg>
+          업로드한 파일은 브라우저에서만 처리되며 서버에 저장되지 않습니다.
+        </p>
+      </section>
+
+      <div id="messageArea" class="message-area" aria-live="polite"></div>
+      <section id="resultSection" class="result-section is-hidden" aria-live="polite"></section>
+
+      <section class="criteria-card">
+        <button class="criteria-toggle" id="criteriaToggle" type="button" aria-expanded="false">
+          <span>
+            <span class="section-step">기준</span>
+            <strong>무엇을 더하고, 무엇을 제외하나요?</strong>
+          </span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 10 4 4 4-4"/></svg>
+        </button>
+        <div class="criteria-body" id="criteriaBody" hidden>
+          <div>
+            <h3>학교운영경비</h3>
+            <p>세입실적의 예산액 중 아래 8개 원가통계비목만 합산합니다.</p>
+            <div class="pill-list">
+              <span>학교운영비전입금</span><span>사용료</span><span>수수료</span><span>자산매각대</span>
+              <span>지난년도수입</span><span>이자수입</span><span>기타행정활동수입</span><span>순세계잉여금</span>
+            </div>
+          </div>
+          <div>
+            <h3>일반업무추진비</h3>
+            <p><strong>B200101 일반업무추진비</strong>의 예산액만 계산합니다.</p>
+            <p class="muted">직책급업무수행경비와 목적사업업무추진비는 제외합니다.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>제작 <strong>senvip</strong> · upchubi-3per</span>
+      <span>v0.1.3</span>
+    </footer>
+    <div class="modal-backdrop is-hidden" id="helpModal" role="presentation">
+      <section class="help-modal" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+        <div class="help-modal-head">
+          <div>
+            <span class="help-eyebrow">도움말</span>
+            <h2 id="helpTitle">업추비 3% 사용방법</h2>
+          </div>
+          <button class="icon-button" id="helpCloseButton" type="button" aria-label="도움말 닫기">×</button>
+        </div>
+        <div class="help-modal-body">
+          <section class="help-section">
+            <span class="help-step">01</span>
+            <div>
+              <h3>에듀파인에서 파일 2개를 내려받아요</h3>
+              <div class="help-path">학교회계 <b>›</b> 예산결산 <b>›</b> 결산현황 <b>›</b> 집행실적 <b>›</b> <strong>엑셀저장(마감)</strong></div>
+              <div class="help-file-grid">
+                <div><strong>[세입실적] 탭</strong><span>학교운영경비 계산용</span></div>
+                <div><strong>[성질별 세출실적] 탭</strong><span>일반업무추진비 계산용</span></div>
+              </div>
+              <figure class="help-figure">
+                <img src="./assets/edufine-download-guide.png" alt="에듀파인 집행실적 화면에서 성질별 세출실적 탭과 엑셀저장 위치를 표시한 예시 화면" />
+                <figcaption>집행실적 화면에서 해당 탭을 선택한 뒤 오른쪽의 <strong>엑셀저장</strong>을 사용하세요.</figcaption>
+              </figure>
+            </div>
+          </section>
+
+          <section class="help-section">
+            <span class="help-step">02</span>
+            <div>
+              <h3>두 파일을 업로드하면 자동으로 계산해요</h3>
+              <p>파일명이나 3월·7월 같은 월 표기는 사용하지 않습니다. <strong>업로드한 파일 안의 현재 예산액</strong>을 기준으로 판정합니다.</p>
+            </div>
+          </section>
+
+          <section class="help-section">
+            <span class="help-step">03</span>
+            <div>
+              <h3>계산 기준은 이렇게 적용해요</h3>
+              <div class="help-rule-box">
+                <strong>분모 · 학교운영경비</strong>
+                <p>학교운영비전입금, 사용료, 수수료, 자산매각대, 지난년도수입, 이자수입, 기타행정활동수입, 순세계잉여금의 예산액 합계</p>
+              </div>
+              <div class="help-rule-box">
+                <strong>분자 · 일반업무추진비</strong>
+                <p>업무추진비 › 일반업무추진비 › 일반업무추진비 <b>(B200101)</b>만 포함합니다. 직책급업무수행경비와 목적사업업무추진비는 제외합니다.</p>
+              </div>
+              <p class="help-callout">최종 판정은 화면에 반올림된 3.00%가 아니라 <strong>원 단위 3% 편성한도</strong>로 확인합니다.</p>
+            </div>
+          </section>
+
+          <section class="help-section compact-help-section">
+            <span class="help-step">04</span>
+            <div>
+              <h3>파일은 서버에 저장하지 않아요</h3>
+              <p>엑셀 파일은 사용 중인 브라우저 안에서만 읽고 계산합니다. 새로고침하거나 화면을 닫으면 업로드 상태도 사라집니다.</p>
+            </div>
+          </section>
+        </div>
+        <div class="help-modal-foot">
+          <span>업추비 3% · v0.1.3</span>
+          <button class="primary-button" id="helpConfirmButton" type="button">확인</button>
+        </div>
+      </section>
+    </div>
+  </div>
+`;
+
+const resultSection = document.querySelector('#resultSection');
+const messageArea = document.querySelector('#messageArea');
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
+function rowsFromWorkbook(workbook) {
+  const preferred = workbook.SheetNames.find((name) => /집행실적/.test(name));
+  const orderedNames = preferred
+    ? [preferred, ...workbook.SheetNames.filter((name) => name !== preferred)]
+    : workbook.SheetNames;
+
+  let best = null;
+  for (const sheetName of orderedNames) {
+    const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {
+      header: 1,
+      raw: true,
+      defval: null,
+      blankrows: false,
+    });
+    const classification = classifyRows(rows);
+    if (classification.type !== 'unknown') {
+      return { rows, sheetName, classification };
+    }
+    if (!best && rows.length) best = { rows, sheetName, classification };
+  }
+  return best;
+}
+
+let xlsxLoaderPromise = null;
+
+function ensureXLSX() {
+  if (window.XLSX) return Promise.resolve(window.XLSX);
+  if (xlsxLoaderPromise) return xlsxLoaderPromise;
+
+  xlsxLoaderPromise = new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = 'https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js';
+    script.async = true;
+    script.onload = () => window.XLSX
+      ? resolve(window.XLSX)
+      : reject(new Error('엑셀 읽기 기능을 초기화하지 못했습니다.'));
+    script.onerror = () => reject(new Error('엑셀 읽기 기능을 불러오지 못했습니다. 인터넷 연결을 확인한 뒤 다시 시도해주세요.'));
+    document.head.appendChild(script);
+  });
+  return xlsxLoaderPromise;
+}
+
+async function parseFile(file) {
+  const XLSX = await ensureXLSX();
+  const buffer = await file.arrayBuffer();
+  let workbook;
+  try {
+    workbook = XLSX.read(buffer, { type: 'array', cellDates: false, dense: false });
+  } catch (error) {
+    const text = String(error?.message || error);
+    if (/password|encrypted|encryption/i.test(text)) {
+      throw new Error('암호가 설정된 엑셀 파일은 읽을 수 없습니다. 암호를 해제한 뒤 다시 저장해주세요.');
+    }
+    throw new Error('엑셀 파일을 읽지 못했습니다. 파일이 손상되지 않았는지 확인해주세요.');
+  }
+
+  const parsed = rowsFromWorkbook(workbook);
+  if (!parsed || !parsed.rows?.length) {
+    throw new Error('빈 엑셀 파일이거나 읽을 수 있는 데이터가 없습니다.');
+  }
+
+  if (parsed.classification.type === 'unknown') {
+    throw new Error('집행실적 세입실적 또는 성질별 세출실적 형식으로 판별하지 못했습니다.');
+  }
+
+  if (parsed.classification.type === 'income') {
+    return {
+      type: 'income',
+      file,
+      sheetName: parsed.sheetName,
+      data: extractIncome(parsed.rows),
+    };
+  }
+
+  return {
+    type: 'expense',
+    file,
+    sheetName: parsed.sheetName,
+    data: extractExpense(parsed.rows),
+  };
+}
+
+function setStatus(type) {
+  const el = document.querySelector(`[data-status="${type}"]`);
+  const item = state[type];
+  if (!item) {
+    el.innerHTML = '';
+    return;
+  }
+  el.innerHTML = `
+    <div class="status-ok">
+      <span class="status-check">✓</span>
+      <div>
+        <strong>${type === 'income' ? '세입실적 파일 확인됨' : '세출실적 파일 확인됨'}</strong>
+        <span title="${escapeHtml(item.file.name)}">${escapeHtml(item.file.name)}</span>
+      </div>
+    </div>
+  `;
+}
+
+function showMessage(message, kind = 'info') {
+  messageArea.innerHTML = message
+    ? `<div class="notice ${kind}">${escapeHtml(message)}</div>`
+    : '';
+}
+
+function clearMessage() {
+  showMessage('');
+}
+
+function renderResults() {
+  if (!state.income || !state.expense) {
+    resultSection.classList.add('is-hidden');
+    resultSection.innerHTML = '';
+    return;
+  }
+
+  let result;
+  try {
+    result = calculateStatus(state.income.data.total, state.expense.data.amount);
+  } catch (error) {
+    showMessage(error.message, 'error');
+    return;
+  }
+
+  clearMessage();
+  const ratio2 = result.ratio.toFixed(2);
+  const ratio6 = result.ratio.toFixed(6);
+  const progress = Math.min((result.ratio / 3) * 100, 100);
+  const stateClass = result.isCompliant ? 'ok' : 'over';
+  const stateLabel = result.isCompliant ? '적정' : '3% 초과';
+  const diffLabel = result.isCompliant
+    ? `${formatWon(result.difference)} 여유`
+    : `기준보다 ${formatWon(result.difference)} 초과`;
+
+  resultSection.innerHTML = `
+    <div class="section-heading result-heading">
+      <div>
+        <span class="section-step">02</span>
+        <h2>업로드한 자료 기준 결과</h2>
+      </div>
+      <p>반올림된 비율이 아니라 원 단위 3% 편성한도로 최종 판정합니다.</p>
+    </div>
+
+    <article class="result-hero ${stateClass}">
+      <div class="result-topline">
+        <span>편성비율</span>
+        <strong class="verdict">${stateLabel}</strong>
+      </div>
+      <div class="result-ratio">${ratio2}<small>%</small></div>
+      <p class="result-summary">기준 3.00% 이하 · <strong>${diffLabel}</strong></p>
+      <div class="progress-wrap" aria-label="3% 편성 기준선">
+        <div class="progress-track"><div class="progress-fill" style="width:${progress}%"></div></div>
+        <div class="progress-labels"><span>0%</span><span>3.00%</span></div>
+      </div>
+      ${!result.isCompliant && result.ratio < 3.005 ? `<p class="rounding-warning">표시 비율은 ${ratio2}%이지만 정확비율 ${ratio6}%로, 원 단위 한도를 초과했습니다.</p>` : ''}
+    </article>
+
+    <article class="metrics-card">
+      <div class="metric">
+        <span>학교운영경비</span>
+        <strong>${formatWon(result.operatingBudget)}</strong>
+        <small>${formatKoreanMoney(result.operatingBudget)}</small>
+      </div>
+      <div class="metric featured">
+        <span>3% 편성한도</span>
+        <strong>${formatWon(result.maxAllowed)}</strong>
+        <small>${formatKoreanMoney(result.maxAllowed)}</small>
+      </div>
+      <div class="metric">
+        <span>일반업무추진비</span>
+        <strong>${formatWon(result.generalExpense)}</strong>
+        <small>${formatKoreanMoney(result.generalExpense)}</small>
+      </div>
+    </article>
+
+    <div class="formula-card">
+      <span>계산식</span>
+      <strong>${result.generalExpense.toLocaleString('ko-KR')} ÷ ${result.operatingBudget.toLocaleString('ko-KR')} × 100 = ${ratio2}%</strong>
+    </div>
+
+    <div class="details-stack">
+      <details>
+        <summary>
+          <span><strong>학교운영경비 산출내역</strong><small>8개 원가통계비목 합계 ${formatWon(result.operatingBudget)}</small></span>
+          <span class="summary-action">펼치기</span>
+        </summary>
+        <div class="detail-body">
+          <div class="detail-table">
+            ${state.income.data.items.map((item) => `
+              <div class="detail-row">
+                <span>${escapeHtml(item.name)}</span>
+                <strong>${formatWon(item.amount)}</strong>
+              </div>
+            `).join('')}
+            <div class="detail-row total"><span>학교운영경비</span><strong>${formatWon(result.operatingBudget)}</strong></div>
+          </div>
+          <p class="detail-note">전체 세입예산이 아니라, 위 8개 원가통계비목의 <strong>예산액</strong>만 합산합니다.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <span><strong>일반업무추진비 산출내역</strong><small>B200101만 계산 · ${formatWon(result.generalExpense)}</small></span>
+          <span class="summary-action">펼치기</span>
+        </summary>
+        <div class="detail-body expense-detail">
+          <div class="rule-line include"><span>포함</span><strong>업무추진비 › 일반업무추진비 › 일반업무추진비 (B200101)</strong></div>
+          <div class="rule-line exclude"><span>제외</span><strong>직책급업무수행경비 · 목적사업업무추진비</strong></div>
+        </div>
+      </details>
+    </div>
+
+    <aside class="result-guidance" aria-label="결과 안내">
+      <span class="guidance-icon" aria-hidden="true">i</span>
+      <div>
+        <strong>안내</strong>
+        <p>이 결과는 업로드한 자료를 기준으로 계산한 확인용 참고자료입니다. 실제 편성 시에는 해당 연도 예산편성 지침과 학교회계 기준을 함께 확인해 주세요.</p>
+      </div>
+    </aside>
+  `;
+
+  resultSection.classList.remove('is-hidden');
+  requestAnimationFrame(() => {
+    resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+}
+
+async function handleFile(file, intendedSlot) {
+  if (!file) return;
+  clearMessage();
+
+  const ext = file.name.toLowerCase().split('.').pop();
+  if (!['xlsx', 'xls'].includes(ext)) {
+    showMessage('엑셀 파일(.xlsx 또는 .xls)을 올려주세요.', 'error');
+    return;
+  }
+
+  const dropZone = document.querySelector(`[data-drop="${intendedSlot}"]`);
+  dropZone.classList.add('is-loading');
+
+  try {
+    const parsed = await parseFile(file);
+    state[parsed.type] = parsed;
+    setStatus(parsed.type);
+
+    if (parsed.type !== intendedSlot) {
+      showMessage(
+        parsed.type === 'income'
+          ? '세입실적 파일로 자동 판별해 왼쪽에 등록했습니다.'
+          : '성질별 세출실적 파일로 자동 판별해 오른쪽에 등록했습니다.',
+        'info',
+      );
+    }
+
+    renderResults();
+  } catch (error) {
+    showMessage(error.message || '파일 처리 중 오류가 발생했습니다.', 'error');
+  } finally {
+    dropZone.classList.remove('is-loading');
+  }
+}
+
+document.querySelectorAll('.drop-zone').forEach((zone) => {
+  const slot = zone.dataset.drop;
+  const input = zone.querySelector('input[type="file"]');
+
+  zone.addEventListener('click', () => input.click());
+  zone.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      input.click();
+    }
+  });
+  input.addEventListener('change', () => handleFile(input.files?.[0], slot));
+
+  ['dragenter', 'dragover'].forEach((eventName) => {
+    zone.addEventListener(eventName, (event) => {
+      event.preventDefault();
+      zone.classList.add('is-dragging');
+    });
+  });
+  ['dragleave', 'drop'].forEach((eventName) => {
+    zone.addEventListener(eventName, (event) => {
+      event.preventDefault();
+      zone.classList.remove('is-dragging');
+    });
+  });
+  zone.addEventListener('drop', (event) => handleFile(event.dataTransfer.files?.[0], slot));
+});
+
+document.querySelector('#resetButton').addEventListener('click', () => {
+  state.income = null;
+  state.expense = null;
+  document.querySelectorAll('input[type="file"]').forEach((input) => { input.value = ''; });
+  setStatus('income');
+  setStatus('expense');
+  clearMessage();
+  renderResults();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+const criteriaToggle = document.querySelector('#criteriaToggle');
+const criteriaBody = document.querySelector('#criteriaBody');
+criteriaToggle.addEventListener('click', () => {
+  const expanded = criteriaToggle.getAttribute('aria-expanded') === 'true';
+  criteriaToggle.setAttribute('aria-expanded', String(!expanded));
+  criteriaBody.hidden = expanded;
+});
+
+const helpModal = document.querySelector('#helpModal');
+const helpButton = document.querySelector('#helpButton');
+const helpCloseButton = document.querySelector('#helpCloseButton');
+const helpConfirmButton = document.querySelector('#helpConfirmButton');
+
+function openHelp() {
+  helpModal.classList.remove('is-hidden');
+  document.body.classList.add('modal-open');
+  requestAnimationFrame(() => helpCloseButton.focus());
+}
+
+function closeHelp() {
+  helpModal.classList.add('is-hidden');
+  document.body.classList.remove('modal-open');
+  helpButton.focus();
+}
+
+helpButton.addEventListener('click', openHelp);
+helpCloseButton.addEventListener('click', closeHelp);
+helpConfirmButton.addEventListener('click', closeHelp);
+helpModal.addEventListener('click', (event) => {
+  if (event.target === helpModal) closeHelp();
+});
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && !helpModal.classList.contains('is-hidden')) closeHelp();
+});
+
+  </script>
+</body>
+</html>
