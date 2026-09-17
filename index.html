@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#08756C" />
+  <meta name="theme-color" content="#3159D8" />
   <meta name="description" content="서울특별시교육청 학교회계의 학교운영경비 대비 일반업무추진비 3% 이내 편성 여부를 확인하는 실무도구" />
   <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
   <title>업추비 3% | 업무추진비 편성 체크</title>
@@ -11,30 +11,33 @@
 :root {
   font-family: Pretendard, "Noto Sans KR", "Malgun Gothic", "Apple SD Gothic Neo", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: #1F2937;
-  background: #F5F7F8;
+  background: #f3f5f8;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
-  --primary: #08756c;
-  --primary-dark: #075b55;
-  --soft: #eef7f5;
-  --border: #e3e7ec;
+  --primary: #3159d8;
+  --primary-dark: #2446b5;
+  --soft: #eef2ff;
+  --border: #e7eaf0;
   --text: #1f2937;
   --muted: #667085;
-  --ok: #08775a;
+  --ok: #3159d8;
   --danger: #b83832;
+  --info-blue: #3159d8;
+  --info-blue-dark: #2446b5;
+  --info-blue-soft: #eef2ff;
   --white: #ffffff;
   --shadow: 0 12px 28px rgba(15, 23, 42, 0.055);
 }
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body { margin: 0; min-width: 320px; min-height: 100vh; background: #f5f7f8; color: var(--text); font-size: 16px; }
+body { margin: 0; min-width: 320px; min-height: 100vh; background: #f3f5f8; color: var(--text); font-size: 16px; }
 button, input { font: inherit; }
 button { color: inherit; }
 svg { display: block; }
 
 .page-shell { max-width: 1180px; margin: 0 auto; padding: 0 28px 36px; }
-.topbar { height: 72px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(227, 231, 236, .95); }
+.topbar { height: 72px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(231, 234, 240, .98); }
 .brand { display: inline-flex; align-items: center; gap: 10px; color: var(--primary-dark); font-weight: 800; text-decoration: none; letter-spacing: -.02em; }
 .brand-mark { width: 35px; height: 35px; color: var(--primary); }
 .ghost-button { min-height: 40px; padding: 0 14px; border: 1px solid var(--border); border-radius: 10px; background: rgba(255,255,255,.78); color: #475467; font-size: 13px; font-weight: 700; cursor: pointer; }
@@ -46,15 +49,18 @@ main { padding-top: 56px; }
 .hero h1 { margin: 0; font-size: clamp(34px, 5vw, 52px); line-height: 1.08; letter-spacing: -.045em; }
 .hero h1 span { color: var(--primary); }
 .hero p { margin: 15px 0 0; color: var(--muted); font-size: 17px; line-height: 1.7; letter-spacing: -.02em; }
-.scope-note { width: 100%; margin-top: 18px; padding: 14px 16px; border: 1px solid #e3e7ec; border-radius: 12px; background: #ffffff; color: #475467; font-size: 15px; line-height: 1.72; word-break: keep-all; overflow-wrap: normal; box-shadow: 0 2px 8px rgba(15, 23, 42, .025); }
+.scope-note { width: 100%; margin-top: 18px; padding: 14px 16px; border: 1px solid #e7eaf0; border-radius: 12px; background: #ffffff; color: #475467; font-size: 15px; line-height: 1.72; word-break: keep-all; overflow-wrap: normal; box-shadow: 0 2px 8px rgba(15, 23, 42, .025); }
 .scope-note strong { color: var(--primary-dark); font-weight: 800; }
 
-.path-card { display: grid; grid-template-columns: 44px 1fr; gap: 17px; margin: 0 0 38px; padding: 22px 24px; border: 1px solid var(--border); border-radius: 18px; background: linear-gradient(135deg, #fafbfc, #ffffff); box-shadow: 0 4px 16px rgba(15, 23, 42, .035); }
-.path-icon { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 13px; color: var(--primary); background: #eef7f5; }
+.path-card { display: grid; grid-template-columns: 44px 1fr; gap: 17px; margin: 0 0 38px; padding: 22px 24px; border: 1px solid var(--border); border-radius: 18px; background: linear-gradient(135deg, #f8faff, #ffffff); box-shadow: 0 4px 16px rgba(15, 23, 42, .035); }
+.path-icon { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 13px; color: var(--primary); background: #eef2ff; }
 .path-icon svg, .drop-icon svg, .privacy-note svg, .criteria-toggle svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.path-heading-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.path-heading-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; width: 100%; }
 .path-heading-row h2 { margin: 0; font-size: 17px; letter-spacing: -.025em; }
-.path-badge { display: inline-flex; align-items: center; min-height: 24px; padding: 0 8px; border-radius: 999px; background: #e7f4f1; color: var(--primary-dark); font-size: 11px; font-weight: 800; }
+.download-help-link { margin-left: auto; min-height: 32px; padding: 0 4px; border: 0; border-radius: 8px; background: transparent; color: var(--primary); font-size: 12.5px; font-weight: 800; cursor: pointer; text-decoration: none; transition: color .16s ease, background .16s ease; }
+.download-help-link:hover { color: var(--primary-dark); background: var(--soft); }
+.download-help-link:focus-visible { outline: 2px solid rgba(49, 89, 216, .32); outline-offset: 2px; }
+.path-badge { display: inline-flex; align-items: center; min-height: 24px; padding: 0 8px; border-radius: 999px; background: #e8edff; color: var(--primary-dark); font-size: 11px; font-weight: 800; }
 .breadcrumb { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; margin-top: 10px; color: #667085; font-size: 14px; line-height: 1.7; }
 .breadcrumb b { color: #98a2b3; font-weight: 700; }
 .breadcrumb strong { color: var(--primary-dark); font-weight: 800; }
@@ -62,29 +68,157 @@ main { padding-top: 56px; }
 .download-tabs > div { display: inline-flex; align-items: center; gap: 8px; color: #667085; font-size: 13px; }
 .tab-chip { padding: 5px 9px; border: 1px solid #dbe2e8; border-radius: 8px; background: white; color: var(--primary-dark); font-weight: 800; }
 
+
+.input-mode-tabs {
+  display: inline-flex;
+  gap: 4px;
+  margin: 0 0 16px;
+  padding: 4px;
+  border: 1px solid #d7dce6;
+  border-radius: 12px;
+  background: #f3f5f8;
+}
+.input-mode-tab {
+  min-height: 36px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: #667085;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.input-mode-tab.is-active {
+  background: #fff;
+  color: var(--primary);
+  box-shadow: 0 3px 10px rgba(32,43,69,.08);
+}
+.manual-input-panel {
+  padding: 20px;
+  border: 1px solid #d7dce6;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+.manual-input-head {
+  margin-bottom: 16px;
+}
+.manual-input-head strong {
+  display: block;
+  color: #172033;
+  font-size: 16px;
+}
+.manual-input-head p {
+  margin: 5px 0 0;
+  color: #667085;
+  font-size: 13px;
+  line-height: 1.6;
+  word-break: keep-all;
+}
+.manual-input-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.manual-field {
+  display: grid;
+  gap: 7px;
+}
+.manual-field > span {
+  color: #465166;
+  font-size: 12.5px;
+  font-weight: 800;
+}
+.manual-input-wrap {
+  display: flex;
+  align-items: center;
+  min-height: 46px;
+  padding: 0 13px;
+  border: 1px solid #d7dce6;
+  border-radius: 12px;
+  background: #fff;
+}
+.manual-input-wrap:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(49,89,216,.10);
+}
+.manual-input-wrap input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #172033;
+  font-size: 16px;
+  font-weight: 800;
+  text-align: right;
+}
+.manual-input-wrap em {
+  margin-left: 7px;
+  color: #8791a4;
+  font-size: 12px;
+  font-style: normal;
+}
+.manual-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 14px;
+}
+.manual-calc-button {
+  min-height: 40px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 11px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 850;
+  cursor: pointer;
+}
+.manual-calc-button:hover { background: var(--primary-dark); }
+.manual-clear-button {
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid #d7dce6;
+  border-radius: 11px;
+  background: #fff;
+  color: #667085;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.manual-error {
+  min-height: 18px;
+  margin: 8px 0 0;
+  color: #b83832;
+  font-size: 12px;
+}
+
 .upload-section { padding-top: 2px; }
 .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 16px; }
 .section-heading > div { display: flex; align-items: center; gap: 10px; min-width: 0; }
-.section-step { display: inline-flex; min-width: 34px; height: 24px; padding: 0 8px; align-items: center; justify-content: center; border-radius: 7px; background: #eef7f5; color: var(--primary-dark); font-size: 11px; font-weight: 900; letter-spacing: .04em; }
+.section-step { display: inline-flex; min-width: 34px; height: 24px; padding: 0 8px; align-items: center; justify-content: center; border-radius: 7px; background: #eef2ff; color: var(--primary-dark); font-size: 11px; font-weight: 900; letter-spacing: .04em; }
 .section-heading h2 { margin: 0; font-size: 20px; letter-spacing: -.03em; }
 .section-heading p { margin: 0; max-width: 520px; color: var(--muted); font-size: 13px; line-height: 1.62; text-align: right; word-break: keep-all; overflow-wrap: normal; }
 
 .upload-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-.upload-card { padding: 18px; border: 1px solid #e3e7ec; border-radius: 18px; background: #fff; box-shadow: var(--shadow); }
+.upload-card { padding: 18px; border: 1px solid #e7eaf0; border-radius: 18px; background: #fff; box-shadow: var(--shadow); }
 .upload-card-head { display: flex; align-items: center; gap: 11px; padding: 2px 2px 14px; }
-.upload-number { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 9px; background: #eef7f5; color: var(--primary); font-weight: 900; font-size: 13px; }
+.upload-number { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 9px; background: #eef2ff; color: var(--primary); font-weight: 900; font-size: 13px; }
 .upload-card h3 { margin: 0; font-size: 16px; letter-spacing: -.025em; }
 .upload-card-head p { margin: 3px 0 0; color: var(--muted); font-size: 12px; }
-.drop-zone { min-height: 162px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 20px; border: 1.5px dashed #cbd8d5; border-radius: 14px; background: #fbfcfd; color: #5f6b7a; cursor: pointer; transition: border-color .18s ease, background .18s ease, transform .18s ease; outline: none; }
-.drop-zone:hover, .drop-zone:focus-visible, .drop-zone.is-dragging { border-color: var(--primary); background: #f6faf9; }
+.drop-zone { min-height: 162px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 20px; border: 1.5px dashed #c4cdec; border-radius: 14px; background: #fbfcfd; color: #5f6b7a; cursor: pointer; transition: border-color .18s ease, background .18s ease, transform .18s ease; outline: none; }
+.drop-zone:hover, .drop-zone:focus-visible, .drop-zone.is-dragging { border-color: var(--primary); background: #f7f9ff; }
 .drop-zone.is-dragging { transform: translateY(-2px); }
 .drop-zone.is-loading { opacity: .68; pointer-events: none; }
-.drop-icon { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 12px; background: #eef7f5; color: var(--primary); }
+.drop-icon { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 12px; background: #eef2ff; color: var(--primary); }
 .drop-zone strong { color: #344054; font-size: 14px; }
 .drop-zone > span { font-size: 11px; color: #8b95a5; }
 .file-status { min-height: 0; margin-top: 12px; }
-.status-ok { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 10px; align-items: center; padding: 10px 11px; border-radius: 11px; background: #f6faf9; }
-.status-check { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; background: #e6f4ef; color: var(--ok); font-weight: 900; }
+.status-ok { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 10px; align-items: center; padding: 10px 11px; border-radius: 11px; background: #f7f9ff; }
+.status-check { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; background: #e7edff; color: var(--ok); font-weight: 900; }
 .status-ok div { min-width: 0; }
 .status-ok strong { display: block; color: #344054; font-size: 12px; }
 .status-ok span:last-child { display: block; margin-top: 2px; color: #667085; font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -92,19 +226,19 @@ main { padding-top: 56px; }
 .privacy-note svg { width: 15px; height: 15px; }
 
 .message-area { margin-top: 14px; }
-.notice { padding: 12px 14px; border: 1px solid #e3e7ec; border-radius: 11px; background: #fff; color: #5f6b7a; font-size: 13px; line-height: 1.55; }
+.notice { padding: 12px 14px; border: 1px solid #e7eaf0; border-radius: 11px; background: #fff; color: #5f6b7a; font-size: 13px; line-height: 1.55; }
 .notice.error { border-color: #efd0cd; background: #fff7f6; color: #a1433d; }
-.notice.info { border-color: #dbe5e2; background: #f6faf9; color: #3f5f59; }
+.notice.info { border-color: #d9e1fb; background: #f7f9ff; color: #3f5f59; }
 
 .result-section { scroll-margin-top: 16px; margin-top: 52px; }
 .is-hidden { display: none !important; }
 .result-heading { margin-bottom: 18px; }
-.result-hero { position: relative; padding: 26px 28px 24px; border: 1px solid #e3e7ec; border-radius: 20px; background: linear-gradient(145deg, #ffffff 0%, #fafbfc 100%); box-shadow: 0 14px 36px rgba(15, 23, 42, .065); overflow: hidden; }
-.result-hero::after { content: ''; position: absolute; width: 180px; height: 180px; border-radius: 50%; top: -100px; right: -65px; background: rgba(20, 125, 115, .055); }
+.result-hero { position: relative; padding: 26px 28px 24px; border: 1px solid #e7eaf0; border-radius: 20px; background: linear-gradient(145deg, #ffffff 0%, #fafbfc 100%); box-shadow: 0 14px 36px rgba(15, 23, 42, .065); overflow: hidden; }
+.result-hero::after { content: ''; position: absolute; width: 180px; height: 180px; border-radius: 50%; top: -100px; right: -65px; background: rgba(49, 89, 216, .055); }
 .result-hero.over { border-color: #ecc8c5; background: linear-gradient(145deg, #fff 0%, #fff8f7 100%); }
 .result-hero.over::after { background: rgba(200, 75, 69, .055); }
 .result-topline { position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; color: #667085; font-size: 13px; font-weight: 800; }
-.verdict { padding: 6px 10px; border-radius: 999px; background: #e7f4f0; color: var(--ok); font-size: 12px; }
+.verdict { padding: 6px 10px; border-radius: 999px; background: #eef2ff; color: var(--ok); font-size: 12px; }
 .over .verdict { background: #fbe6e4; color: var(--danger); }
 .result-ratio { position: relative; z-index: 1; margin-top: 14px; color: var(--primary-dark); font-size: clamp(56px, 8vw, 78px); line-height: 1; font-weight: 850; letter-spacing: -.055em; font-variant-numeric: tabular-nums; }
 .over .result-ratio { color: #a63f39; }
@@ -119,7 +253,7 @@ main { padding-top: 56px; }
 .progress-labels { display: flex; justify-content: space-between; margin-top: 7px; color: #8b95a5; font-size: 10px; font-variant-numeric: tabular-nums; }
 .rounding-warning { position: relative; z-index: 1; margin: 13px 0 0; padding-top: 12px; border-top: 1px solid #f0d9d7; color: #9b4b45; font-size: 12px; line-height: 1.55; }
 
-.metrics-card { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 14px; padding: 6px 0; border: 1px solid #e3e7ec; border-radius: 16px; background: #fff; }
+.metrics-card { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 14px; padding: 6px 0; border: 1px solid #e7eaf0; border-radius: 16px; background: #fff; }
 .metric { min-width: 0; padding: 18px 22px; border-right: 1px solid #eef1f4; }
 .metric:last-child { border-right: 0; }
 .metric span { display: block; color: #667085; font-size: 12px; font-weight: 700; }
@@ -127,11 +261,11 @@ main { padding-top: 56px; }
 .metric small { display: block; margin-top: 4px; color: #7a8594; font-size: 11px; text-align: right; }
 .metric.featured strong { color: var(--primary-dark); }
 
-.formula-card { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 12px; padding: 13px 16px; border-radius: 12px; background: #f1f3f5; color: #667085; }
+.formula-card { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 12px; padding: 13px 16px; border-radius: 12px; background: #f3f5f8; color: #667085; }
 .formula-card span { font-size: 11px; font-weight: 800; }
 .formula-card strong { color: #475467; font-size: 12.5px; font-variant-numeric: tabular-nums; text-align: right; }
 .details-stack { display: grid; gap: 10px; margin-top: 22px; }
-details { border: 1px solid #e3e7ec; border-radius: 14px; background: #fff; overflow: hidden; }
+details { border: 1px solid #e7eaf0; border-radius: 14px; background: #fff; overflow: hidden; }
 summary { min-height: 72px; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 15px 18px; cursor: pointer; list-style: none; }
 summary::-webkit-details-marker { display: none; }
 summary > span:first-child { min-width: 0; }
@@ -147,7 +281,7 @@ details[open] .summary-action::after { content: '접기'; font-size: 11px; }
 .detail-row strong { color: #344054; font-variant-numeric: tabular-nums; text-align: right; }
 .detail-row.total { min-height: 50px; border-bottom: 0; }
 .detail-row.total span, .detail-row.total strong { color: var(--primary-dark); font-weight: 900; }
-.detail-note { margin: 4px 0 0; padding: 11px 12px; border-radius: 10px; background: #f6f7f9; color: #667085; font-size: 11.5px; line-height: 1.6; }
+.detail-note { margin: 4px 0 0; padding: 11px 12px; border-radius: 10px; background: #f3f5f8; color: #667085; font-size: 11.5px; line-height: 1.6; }
 .expense-detail { padding-top: 14px; }
 .rule-line { display: grid; grid-template-columns: 54px 1fr; gap: 12px; align-items: start; padding: 10px 0; font-size: 12px; }
 .rule-line + .rule-line { border-top: 1px solid #eef1f4; }
@@ -200,7 +334,7 @@ details[open] .summary-action::after { content: '접기'; font-size: 11px; }
   overflow-wrap: normal;
 }
 
-.criteria-card { margin-top: 42px; border: 1px solid #e3e7ec; border-radius: 16px; background: rgba(255,255,255,.78); overflow: hidden; }
+.criteria-card { margin-top: 42px; border: 1px solid #e7eaf0; border-radius: 16px; background: rgba(255,255,255,.78); overflow: hidden; }
 .criteria-toggle { width: 100%; min-height: 66px; display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 14px 18px; border: 0; background: transparent; cursor: pointer; }
 .criteria-toggle > span { display: flex; align-items: center; gap: 10px; text-align: left; }
 .criteria-toggle strong { font-size: 13px; }
@@ -212,7 +346,7 @@ details[open] .summary-action::after { content: '접기'; font-size: 11px; }
 .help-callout, .criteria-body p, .detail-note { word-break: keep-all; overflow-wrap: normal; }
 .criteria-body .muted { margin-top: 8px; color: #8b7e7c; }
 .pill-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
-.pill-list span { padding: 5px 8px; border: 1px solid #e3e7ec; border-radius: 8px; background: #fff; color: #667085; font-size: 10.5px; }
+.pill-list span { padding: 5px 8px; border: 1px solid #e7eaf0; border-radius: 8px; background: #fff; color: #667085; font-size: 10.5px; }
 
 footer { display: flex; justify-content: space-between; margin-top: 42px; padding: 20px 2px 4px; border-top: 1px solid #e3e7ec; color: #8a94a3; font-size: 10.5px; }
 
@@ -221,8 +355,8 @@ footer { display: flex; justify-content: space-between; margin-top: 42px; paddin
 .app-title-copy strong { font-size: 17px; line-height: 1.15; letter-spacing: -.03em; }
 .app-title-copy small { color: #667085; font-size: 10.5px; font-weight: 700; letter-spacing: -.01em; }
 .topbar-actions { display: flex; align-items: center; gap: 8px; }
-.version-badge { display: inline-flex; align-items: center; min-height: 30px; padding: 0 9px; border: 1px solid #e3e7ec; border-radius: 999px; background: #f7f8fa; color: #667085; font-size: 10.5px; font-weight: 800; font-variant-numeric: tabular-nums; }
-.help-button { color: var(--primary-dark); background: #f8fafb; border-color: #dbe5e2; }
+.version-badge { display: inline-flex; align-items: center; min-height: 30px; padding: 0 9px; border: 1px solid #e7eaf0; border-radius: 999px; background: #f3f5f8; color: #667085; font-size: 10.5px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.help-button { color: var(--primary-dark); background: #f8fafb; border-color: #d9e1fb; }
 .compact-hero { max-width: none; width: 100%; margin-bottom: 26px; }
 .compact-hero .hero-kicker,
 .compact-hero h1,
@@ -234,29 +368,30 @@ body.modal-open { overflow: hidden; }
 .help-modal-head { flex: 0 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 20px 22px 17px; border-bottom: 1px solid #eef1f4; }
 .help-eyebrow { display: block; margin-bottom: 4px; color: var(--primary); font-size: 10.5px; font-weight: 900; letter-spacing: .08em; }
 .help-modal-head h2 { margin: 0; font-size: 20px; letter-spacing: -.035em; }
-.icon-button { width: 38px; height: 38px; display: grid; place-items: center; flex: 0 0 auto; border: 1px solid #e2e7ec; border-radius: 11px; background: #f8fbfa; color: #667085; font-size: 24px; line-height: 1; cursor: pointer; }
-.icon-button:hover { background: #f4f7f8; color: var(--primary-dark); }
+.icon-button { width: 38px; height: 38px; display: grid; place-items: center; flex: 0 0 auto; border: 1px solid #e2e7ec; border-radius: 11px; background: #f8faff; color: #667085; font-size: 24px; line-height: 1; cursor: pointer; }
+.icon-button:hover { background: #f3f5f8; color: var(--primary-dark); }
 .help-modal-body { flex: 1 1 auto; overflow: auto; padding: 6px 22px 10px; }
 .help-section { display: grid; grid-template-columns: 42px minmax(0, 1fr); gap: 15px; padding: 20px 0; border-bottom: 1px solid #eef1f4; }
 .help-section:last-child { border-bottom: 0; }
-.help-step { width: 36px; height: 26px; display: grid; place-items: center; border-radius: 8px; background: #eef7f5; color: var(--primary-dark); font-size: 10px; font-weight: 900; letter-spacing: .05em; }
+.help-section.help-target-focus { border-radius: 12px; box-shadow: 0 0 0 3px rgba(49, 89, 216, .10); }
+.help-step { width: 36px; height: 26px; display: grid; place-items: center; border-radius: 8px; background: #eef2ff; color: var(--primary-dark); font-size: 10px; font-weight: 900; letter-spacing: .05em; }
 .help-section h3 { margin: 1px 0 8px; font-size: 15px; letter-spacing: -.025em; }
 .help-section p { margin: 0; color: #667085; font-size: 12.5px; line-height: 1.7; }
-.help-path { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 11px 0; padding: 11px 12px; border-radius: 10px; background: #f6f8fa; color: #5f6b7a; font-size: 12px; line-height: 1.7; }
+.help-path { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 11px 0; padding: 11px 12px; border-radius: 10px; background: #f3f5f8; color: #5f6b7a; font-size: 12px; line-height: 1.7; }
 .help-path b { color: #98a2b3; }
 .help-path strong { color: var(--primary-dark); }
 .help-file-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-bottom: 14px; }
-.help-file-grid > div { display: grid; gap: 3px; padding: 11px 12px; border: 1px solid #e3e7ec; border-radius: 11px; background: #fff; }
+.help-file-grid > div { display: grid; gap: 3px; padding: 11px 12px; border: 1px solid #e7eaf0; border-radius: 11px; background: #fff; }
 .help-file-grid strong { color: #344054; font-size: 12px; }
 .help-file-grid span { color: #7a8594; font-size: 10.5px; }
-.help-figure { margin: 0; padding: 9px; border: 1px solid #e3e7ec; border-radius: 13px; background: #f8fbfa; }
+.help-figure { margin: 0; padding: 9px; border: 1px solid #e7eaf0; border-radius: 13px; background: #f8faff; }
 .help-figure img { width: 100%; height: auto; display: block; border-radius: 8px; border: 1px solid #e7eaee; }
 .help-figure figcaption { margin-top: 8px; color: #667085; font-size: 10.5px; line-height: 1.55; }
-.help-rule-box { margin-top: 9px; padding: 12px 13px; border: 1px solid #e3e7ec; border-radius: 11px; background: #fbfdfc; }
+.help-rule-box { margin-top: 9px; padding: 12px 13px; border: 1px solid #e7eaf0; border-radius: 11px; background: #fbfcff; }
 .help-rule-box > strong { display: block; margin-bottom: 5px; color: #344054; font-size: 11.5px; }
 .help-rule-box p { font-size: 11.5px; }
 .help-callout { margin-top: 10px !important; padding: 10px 12px; border-radius: 10px; background: #fff7ee; color: #8a6840 !important; }
-.help-modal-foot { flex: 0 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 13px 20px; border-top: 1px solid #eef1f4; background: #fbfdfc; }
+.help-modal-foot { flex: 0 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 13px 20px; border-top: 1px solid #eef1f4; background: #fbfcff; }
 .help-modal-foot span { color: #8a94a3; font-size: 10.5px; }
 .primary-button { min-height: 38px; padding: 0 18px; border: 0; border-radius: 10px; background: var(--primary); color: white; font-size: 12px; font-weight: 800; cursor: pointer; }
 .primary-button:hover { background: var(--primary-dark); }
@@ -278,14 +413,14 @@ footer strong { color: #667085; font-weight: 800; }
 .result-guidance p { font-size: 13px; }
 .progress-track { height: 11px; }
 .criteria-card, details, .upload-card, .metrics-card { border-color: #d9e0e6; }
-.drop-zone { border-color: #8dbeb6; background: #f8fafb; color: #475467; }
+.drop-zone { border-color: #9fb0e8; background: #f8faff; color: #475467; }
 footer { color: #667085; font-size: 13px; }
 .app-title-copy small, .version-badge, .privacy-note, .metric span, .metric small, summary small,
 .criteria-body p, .help-section p, .help-file-grid span, .help-figure figcaption, .help-modal-foot span { color: #667085; }
 
 
 
-/* 학교운영경비·일반업무추진비 직접 수정 — v0.1.12 */
+/* 학교운영경비·일반업무추진비 직접 수정 — v0.1.16 */
 .metric-label-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .metric-label-row > span { margin: 0; }
 .metric-edit-button {
@@ -336,7 +471,7 @@ footer { color: #667085; font-size: 13px; }
   border-radius: 10px;
   background: #ffffff;
 }
-.edit-budget-input-wrap:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(8, 117, 108, .09); }
+.edit-budget-input-wrap:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(49, 89, 216, .10); }
 .edit-budget-input-wrap input { width: 100%; min-width: 0; border: 0; outline: 0; background: transparent; color: #344054; font-size: 13px; font-weight: 750; text-align: right; }
 .edit-budget-input-wrap span { margin-left: 6px; color: #667085; font-size: 12px; }
 .edit-budget-apply, .edit-budget-reset { min-height: 40px; padding: 0 13px; border-radius: 10px; font-size: 12px; font-weight: 800; cursor: pointer; }
@@ -345,7 +480,7 @@ footer { color: #667085; font-size: 13px; }
 .edit-budget-reset { border: 1px solid #d9e0e7; background: #ffffff; color: #667085; }
 .edit-budget-reset:hover { border-color: #c6d0d9; background: #fafbfc; }
 .edit-budget-reset:disabled { opacity: .42; cursor: default; }
-.edit-budget-preview { margin-top: 10px; padding: 9px 11px; border-radius: 10px; background: #f7f8fa; color: #667085; font-size: 11.5px; line-height: 1.55; }
+.edit-budget-preview { margin-top: 10px; padding: 9px 11px; border-radius: 10px; background: #f3f5f8; color: #667085; font-size: 11.5px; line-height: 1.55; }
 .edit-budget-preview strong { color: var(--primary-dark); }
 .budget-edit-error { min-height: 18px; margin: 7px 0 0; color: #a1433d; font-size: 11.5px; line-height: 1.5; }
 
@@ -363,9 +498,11 @@ footer { color: #667085; font-size: 13px; }
   .path-icon { width: 38px; height: 38px; border-radius: 11px; }
   .breadcrumb { gap: 5px; font-size: 14px; }
   .download-tabs { display: grid; gap: 7px; }
+  .download-help-link { margin-left: 0; flex-basis: 100%; width: fit-content; padding-left: 0; }
   .section-heading { align-items: flex-start; flex-direction: column; gap: 8px; }
   .section-heading p { text-align: left; }
   .upload-grid { grid-template-columns: 1fr; }
+  .manual-input-grid { grid-template-columns: 1fr; }
   .drop-zone { min-height: 140px; }
   .result-section { margin-top: 42px; }
   .result-hero { padding: 22px 20px; }
@@ -660,6 +797,9 @@ const state = {
   generalExpenseOverride: null,
   budgetEditPanelOpen: false,
   expenseEditPanelOpen: false,
+  inputMode: 'file',
+  manualOperatingBudget: null,
+  manualGeneralExpense: null,
 };
 
 app.innerHTML = `
@@ -680,7 +820,7 @@ app.innerHTML = `
         </span>
       </div>
       <div class="topbar-actions">
-        <span class="version-badge" title="현재 버전">v0.1.12</span>
+        <span class="version-badge" title="현재 버전">v0.1.16</span>
         <button class="ghost-button help-button" id="helpButton" type="button" aria-haspopup="dialog">도움말</button>
         <button class="ghost-button" id="resetButton" type="button">처음부터</button>
       </div>
@@ -690,7 +830,7 @@ app.innerHTML = `
       <section class="hero compact-hero">
         <div class="hero-kicker">서울특별시교육청 학교회계 기준</div>
         <h1>현재 자료로 <span>3% 이내</span>인지 확인해요</h1>
-        <p>세입실적과 성질별 세출실적 두 파일만 올리면 학교운영경비와 일반업무추진비를 자동으로 읽어 계산합니다.</p>
+        <p>세입실적과 성질별 세출실적 두 파일을 올리면 자동 계산하고, 파일이 없으면 금액을 직접 입력할 수도 있습니다.</p>
         <div class="scope-note"><strong>적용 범위</strong> · 서울특별시교육청 학교회계 예산편성 기준을 확인하는 도구입니다. 다른 시·도교육청은 해당 교육청의 예산편성 지침을 확인해 주세요.</div>
       </section>
 
@@ -702,6 +842,7 @@ app.innerHTML = `
           <div class="path-heading-row">
             <h2 id="downloadPathTitle">파일은 여기서 내려받아요</h2>
             <span class="path-badge">에듀파인</span>
+            <button class="download-help-link" id="downloadHelpButton" type="button" aria-label="파일 내려받기 도움말 보기">파일 내려받는 방법</button>
           </div>
           <div class="breadcrumb" aria-label="다운로드 경로">
             <span>학교회계</span><b>›</b><span>예산결산</span><b>›</b><span>결산현황</span><b>›</b><span>집행실적</span><b>›</b><strong>엑셀저장(마감)</strong>
@@ -717,11 +858,17 @@ app.innerHTML = `
         <div class="section-heading">
           <div>
             <span class="section-step">01</span>
-            <h2 id="uploadTitle">엑셀 파일 2개를 올려주세요</h2>
+            <h2 id="uploadTitle">엑셀 파일 2개를 올리거나 직접 입력할 수 있어요</h2>
           </div>
-          <p>파일명이나 월 표기는 보지 않고, 파일 안의 항목을 읽어 자동 판별합니다.</p>
+          <p>파일 안의 항목을 읽어 자동 판별합니다.</p>
         </div>
 
+        <div class="input-mode-tabs" role="tablist" aria-label="입력 방식 선택">
+          <button class="input-mode-tab is-active" id="fileModeTab" type="button" role="tab" aria-selected="true">파일 업로드</button>
+          <button class="input-mode-tab" id="manualModeTab" type="button" role="tab" aria-selected="false">직접 입력</button>
+        </div>
+
+        <div id="fileInputPanel">
         <div class="upload-grid">
           <article class="upload-card" data-slot="income">
             <div class="upload-card-head">
@@ -766,6 +913,35 @@ app.innerHTML = `
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 10V7a4 4 0 0 1 8 0v3m-9 0h10v9H7z"/></svg>
           업로드한 파일은 브라우저에서만 처리되며 서버에 저장되지 않습니다.
         </p>
+        </div>
+
+        <div class="manual-input-panel is-hidden" id="manualInputPanel">
+          <div class="manual-input-head">
+            <strong>파일이 없다면 직접 입력하세요</strong>
+            <p>학교운영경비와 일반업무추진비의 최종 편성 예정액을 입력하면 같은 기준으로 3% 여부를 계산합니다.</p>
+          </div>
+          <div class="manual-input-grid">
+            <label class="manual-field">
+              <span>학교운영경비</span>
+              <span class="manual-input-wrap">
+                <input id="manualOperatingBudget" type="text" inputmode="numeric" autocomplete="off" placeholder="예: 841,896,000" />
+                <em>원</em>
+              </span>
+            </label>
+            <label class="manual-field">
+              <span>일반업무추진비</span>
+              <span class="manual-input-wrap">
+                <input id="manualGeneralExpense" type="text" inputmode="numeric" autocomplete="off" placeholder="예: 25,257,000" />
+                <em>원</em>
+              </span>
+            </label>
+          </div>
+          <div class="manual-actions">
+            <button class="manual-clear-button" id="manualClearButton" type="button">입력 지우기</button>
+            <button class="manual-calc-button" id="manualCalculateButton" type="button">계산하기</button>
+          </div>
+          <p class="manual-error" id="manualError" aria-live="polite"></p>
+        </div>
       </section>
 
       <div id="messageArea" class="message-area" aria-live="polite"></div>
@@ -799,7 +975,7 @@ app.innerHTML = `
 
     <footer>
       <span><strong>학돌랩</strong> · 제작 senvip</span>
-      <span>v0.1.12</span>
+      <span>v0.1.16</span>
     </footer>
     <div class="modal-backdrop is-hidden" id="helpModal" role="presentation">
       <section class="help-modal" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
@@ -814,24 +990,25 @@ app.innerHTML = `
           <section class="help-section">
             <span class="help-step">01</span>
             <div>
-              <h3>에듀파인에서 파일 2개를 내려받아요</h3>
+              <h3>입력 방법을 선택해요</h3>
+              <p><strong>파일 업로드</strong> 또는 <strong>직접 입력</strong> 중 편한 방법을 선택할 수 있습니다. 엑셀 파일이 있다면 세입실적과 성질별 세출실적을 올리고, 파일이 없다면 학교운영경비와 일반업무추진비의 최종 편성 예정액을 직접 입력하세요. 두 방법 모두 같은 3% 기준으로 계산합니다.</p>
+            </div>
+          </section>
+
+          <section class="help-section" id="help-download-files">
+            <span class="help-step">02</span>
+            <div>
+              <h3 id="helpDownloadTitle" tabindex="-1">엑셀 파일이 있다면 에듀파인에서 내려받아요</h3>
               <div class="help-path">학교회계 <b>›</b> 예산결산 <b>›</b> 결산현황 <b>›</b> 집행실적 <b>›</b> <strong>엑셀저장(마감)</strong></div>
               <div class="help-file-grid">
                 <div><strong>[세입실적] 탭</strong><span>학교운영경비 계산용</span></div>
                 <div><strong>[성질별 세출실적] 탭</strong><span>일반업무추진비 계산용</span></div>
               </div>
+              <p>파일 안의 항목을 읽어 자동 판별합니다. 교부액 변경이나 추경 검토 등으로 실제 편성 예정액이 달라졌다면 결과 화면의 <strong>수정하기</strong>에서 최종 금액을 입력해 다시 계산할 수 있습니다.</p>
               <figure class="help-figure">
                 <img src="./assets/edufine-download-guide.png" alt="에듀파인 집행실적 화면에서 성질별 세출실적 탭과 엑셀저장 위치를 표시한 예시 화면" />
                 <figcaption>집행실적 화면에서 해당 탭을 선택한 뒤 오른쪽의 <strong>엑셀저장</strong>을 사용하세요.</figcaption>
               </figure>
-            </div>
-          </section>
-
-          <section class="help-section">
-            <span class="help-step">02</span>
-            <div>
-              <h3>두 파일을 업로드하면 자동으로 계산해요</h3>
-              <p>파일명이나 3월·7월 같은 월 표기는 사용하지 않습니다. <strong>업로드한 파일 안의 현재 예산액</strong>을 기준으로 판정합니다. 이후 교부액 변경이나 추경 검토 등으로 금액이 달라졌다면 결과 화면의 <strong>수정하기</strong>에서 학교운영경비 또는 일반업무추진비의 최종 금액을 직접 입력해 다시 계산할 수 있습니다.</p>
             </div>
           </section>
 
@@ -854,13 +1031,13 @@ app.innerHTML = `
           <section class="help-section compact-help-section">
             <span class="help-step">04</span>
             <div>
-              <h3>파일은 서버에 저장하지 않아요</h3>
-              <p>엑셀 파일은 사용 중인 브라우저 안에서만 읽고 계산합니다. 새로고침하거나 화면을 닫으면 업로드 상태도 사라집니다.</p>
+              <h3>파일과 입력값은 서버에 저장하지 않아요</h3>
+              <p>엑셀 파일과 직접 입력한 금액은 사용 중인 브라우저 안에서만 읽고 계산합니다. 새로고침하거나 화면을 닫으면 입력 상태도 사라집니다.</p>
             </div>
           </section>
         </div>
         <div class="help-modal-foot">
-          <span>업추비 3% · v0.1.12</span>
+          <span>업추비 3% · v0.1.16</span>
           <button class="primary-button" id="helpConfirmButton" type="button">확인</button>
         </div>
       </section>
@@ -991,16 +1168,31 @@ function clearMessage() {
 }
 
 function renderResults() {
-  if (!state.income || !state.expense) {
+  const isManualMode = state.inputMode === 'manual';
+  if (isManualMode) {
+    if (state.manualOperatingBudget === null || state.manualGeneralExpense === null) {
+      resultSection.classList.add('is-hidden');
+      resultSection.innerHTML = '';
+      return;
+    }
+  } else if (!state.income || !state.expense) {
     resultSection.classList.add('is-hidden');
     resultSection.innerHTML = '';
     return;
   }
 
-  const baseOperatingBudget = Math.round(state.income.data.total);
-  const baseGeneralExpense = Math.round(state.expense.data.amount);
-  const effectiveOperatingBudget = state.operatingBudgetOverride ?? baseOperatingBudget;
-  const effectiveGeneralExpense = state.generalExpenseOverride ?? baseGeneralExpense;
+  const baseOperatingBudget = isManualMode
+    ? Math.round(state.manualOperatingBudget)
+    : Math.round(state.income.data.total);
+  const baseGeneralExpense = isManualMode
+    ? Math.round(state.manualGeneralExpense)
+    : Math.round(state.expense.data.amount);
+  const effectiveOperatingBudget = isManualMode
+    ? baseOperatingBudget
+    : (state.operatingBudgetOverride ?? baseOperatingBudget);
+  const effectiveGeneralExpense = isManualMode
+    ? baseGeneralExpense
+    : (state.generalExpenseOverride ?? baseGeneralExpense);
 
   let result;
   try {
@@ -1019,14 +1211,14 @@ function renderResults() {
   const diffLabel = result.isCompliant
     ? `${formatWon(result.difference)} 여유`
     : `기준보다 ${formatWon(result.difference)} 초과`;
-  const isBudgetEdited = state.operatingBudgetOverride !== null;
-  const isExpenseEdited = state.generalExpenseOverride !== null;
+  const isBudgetEdited = !isManualMode && state.operatingBudgetOverride !== null;
+  const isExpenseEdited = !isManualMode && state.generalExpenseOverride !== null;
 
   resultSection.innerHTML = `
     <div class="section-heading result-heading">
       <div>
         <span class="section-step">02</span>
-        <h2>업로드한 자료 기준 결과</h2>
+        <h2>${isManualMode ? '직접 입력 기준 결과' : '업로드한 자료 기준 결과'}</h2>
       </div>
       <p>화면에 표시되는 반올림 비율이 아니라 실제 금액을 기준으로 3% 이내 여부를 확인합니다.</p>
     </div>
@@ -1049,7 +1241,7 @@ function renderResults() {
       <div class="metric">
         <div class="metric-label-row">
           <span>학교운영경비</span>
-          <button class="metric-edit-button" id="budgetEditButton" type="button" aria-expanded="${state.budgetEditPanelOpen}">수정하기</button>
+          ${isManualMode ? '' : `<button class="metric-edit-button" id="budgetEditButton" type="button" aria-expanded="${state.budgetEditPanelOpen}">수정하기</button>`}
         </div>
         <strong>${formatWon(result.operatingBudget)}</strong>
         <small>${formatKoreanMoney(result.operatingBudget)}</small>
@@ -1065,7 +1257,7 @@ function renderResults() {
       <div class="metric">
         <div class="metric-label-row">
           <span>일반업무추진비</span>
-          <button class="metric-edit-button" id="expenseEditButton" type="button" aria-expanded="${state.expenseEditPanelOpen}">수정하기</button>
+          ${isManualMode ? '' : `<button class="metric-edit-button" id="expenseEditButton" type="button" aria-expanded="${state.expenseEditPanelOpen}">수정하기</button>`}
         </div>
         <strong>${formatWon(result.generalExpense)}</strong>
         <small>${formatKoreanMoney(result.generalExpense)}</small>
@@ -1075,7 +1267,7 @@ function renderResults() {
       </div>
     </article>
 
-    <div class="budget-edit-panel ${state.budgetEditPanelOpen ? '' : 'is-hidden'}" id="budgetEditPanel">
+    ${isManualMode ? '' : `<div class="budget-edit-panel ${state.budgetEditPanelOpen ? '' : 'is-hidden'}" id="budgetEditPanel">
       <div class="budget-edit-head">
         <div>
           <strong>학교운영경비 수정</strong>
@@ -1098,9 +1290,9 @@ function renderResults() {
         파일 기준 <strong>${formatWon(baseOperatingBudget)}</strong>${isBudgetEdited ? ` → 현재 적용 <strong>${formatWon(result.operatingBudget)}</strong>` : ' · 현재 파일 금액을 그대로 사용 중'}
       </div>
       <p class="budget-edit-error" id="budgetEditError" aria-live="polite"></p>
-    </div>
+    </div>`}
 
-    <div class="budget-edit-panel ${state.expenseEditPanelOpen ? '' : 'is-hidden'}" id="expenseEditPanel">
+    ${isManualMode ? '' : `<div class="budget-edit-panel ${state.expenseEditPanelOpen ? '' : 'is-hidden'}" id="expenseEditPanel">
       <div class="budget-edit-head">
         <div>
           <strong>일반업무추진비 수정</strong>
@@ -1123,7 +1315,7 @@ function renderResults() {
         파일 기준 <strong>${formatWon(baseGeneralExpense)}</strong>${isExpenseEdited ? ` → 현재 적용 <strong>${formatWon(result.generalExpense)}</strong>` : ' · 현재 파일 금액을 그대로 사용 중'}
       </div>
       <p class="budget-edit-error" id="expenseEditError" aria-live="polite"></p>
-    </div>
+    </div>`}
 
     <div class="formula-card">
       <span>계산식</span>
@@ -1133,33 +1325,42 @@ function renderResults() {
     <div class="details-stack">
       <details>
         <summary>
-          <span><strong>학교운영경비 산출내역</strong><small>8개 원가통계비목 합계 ${formatWon(baseOperatingBudget)}${isBudgetEdited ? ` · 수정 후 ${formatWon(result.operatingBudget)}` : ''}</small></span>
+          <span><strong>학교운영경비 산출내역</strong><small>${isManualMode ? `직접 입력 ${formatWon(baseOperatingBudget)}` : `8개 원가통계비목 합계 ${formatWon(baseOperatingBudget)}${isBudgetEdited ? ` · 수정 후 ${formatWon(result.operatingBudget)}` : ''}`}</small></span>
           <span class="summary-action">펼치기</span>
         </summary>
         <div class="detail-body">
           <div class="detail-table">
-            ${state.income.data.items.map((item) => `
-              <div class="detail-row">
-                <span>${escapeHtml(item.name)}</span>
-                <strong>${formatWon(item.amount)}</strong>
-              </div>
-            `).join('')}
-            <div class="detail-row total"><span>파일 기준 학교운영경비</span><strong>${formatWon(baseOperatingBudget)}</strong></div>
-            ${isBudgetEdited ? `<div class="detail-row total"><span>직접 수정한 학교운영경비</span><strong>${formatWon(result.operatingBudget)}</strong></div>` : ''}
+            ${isManualMode ? `
+              <div class="detail-row total"><span>직접 입력한 학교운영경비</span><strong>${formatWon(baseOperatingBudget)}</strong></div>
+            ` : `
+              ${state.income.data.items.map((item) => `
+                <div class="detail-row">
+                  <span>${escapeHtml(item.name)}</span>
+                  <strong>${formatWon(item.amount)}</strong>
+                </div>
+              `).join('')}
+              <div class="detail-row total"><span>파일 기준 학교운영경비</span><strong>${formatWon(baseOperatingBudget)}</strong></div>
+              ${isBudgetEdited ? `<div class="detail-row total"><span>직접 수정한 학교운영경비</span><strong>${formatWon(result.operatingBudget)}</strong></div>` : ''}
+            `}
           </div>
-          <p class="detail-note">전체 세입예산이 아니라, 위 8개 원가통계비목의 <strong>예산액</strong>만 합산합니다.${isBudgetEdited ? ' 직접 입력한 수정 금액은 원본 파일을 바꾸지 않고 이번 계산에만 적용합니다.' : ''}</p>
+          <p class="detail-note">${isManualMode ? '직접 입력한 금액은 원본 자료를 대체하지 않는 계산용 값입니다.' : `전체 세입예산이 아니라, 위 8개 원가통계비목의 <strong>예산액</strong>만 합산합니다.${isBudgetEdited ? ' 직접 입력한 수정 금액은 원본 파일을 바꾸지 않고 이번 계산에만 적용합니다.' : ''}`}</p>
         </div>
       </details>
 
       <details>
         <summary>
-          <span><strong>일반업무추진비 산출내역</strong><small>B200101만 계산 · 파일 기준 ${formatWon(baseGeneralExpense)}${isExpenseEdited ? ` · 수정 후 ${formatWon(result.generalExpense)}` : ''}</small></span>
+          <span><strong>일반업무추진비 산출내역</strong><small>${isManualMode ? `직접 입력 ${formatWon(baseGeneralExpense)}` : `B200101만 계산 · 파일 기준 ${formatWon(baseGeneralExpense)}${isExpenseEdited ? ` · 수정 후 ${formatWon(result.generalExpense)}` : ''}`}</small></span>
           <span class="summary-action">펼치기</span>
         </summary>
         <div class="detail-body expense-detail">
-          <div class="rule-line include"><span>포함</span><strong>업무추진비 › 일반업무추진비 › 일반업무추진비 (B200101)</strong></div>
-          <div class="rule-line exclude"><span>제외</span><strong>직책급업무수행경비 · 목적사업업무추진비</strong></div>
-          ${isExpenseEdited ? `<div class="edit-budget-preview">파일 기준 <strong>${formatWon(baseGeneralExpense)}</strong> → 현재 적용 <strong>${formatWon(result.generalExpense)}</strong></div>` : ''}
+          ${isManualMode ? `
+            <div class="detail-row total"><span>직접 입력한 일반업무추진비</span><strong>${formatWon(baseGeneralExpense)}</strong></div>
+            <p class="detail-note">일반업무추진비(B200101) 최종 편성 예정액을 직접 입력한 값입니다.</p>
+          ` : `
+            <div class="rule-line include"><span>포함</span><strong>업무추진비 › 일반업무추진비 › 일반업무추진비 (B200101)</strong></div>
+            <div class="rule-line exclude"><span>제외</span><strong>직책급업무수행경비 · 목적사업업무추진비</strong></div>
+            ${isExpenseEdited ? `<div class="edit-budget-preview">파일 기준 <strong>${formatWon(baseGeneralExpense)}</strong> → 현재 적용 <strong>${formatWon(result.generalExpense)}</strong></div>` : ''}
+          `}
         </div>
       </details>
     </div>
@@ -1168,7 +1369,7 @@ function renderResults() {
       <span class="guidance-icon" aria-hidden="true">i</span>
       <div>
         <strong>안내</strong>
-        <p>이 결과는 업로드한 자료와 직접 수정한 금액을 기준으로 계산한 확인용 참고자료입니다. 실제 편성 시에는 해당 연도 예산편성 지침과 학교회계 기준을 함께 확인해 주세요.</p>
+        <p>${isManualMode ? '이 결과는 직접 입력한 금액을 기준으로 계산한 확인용 참고자료입니다.' : '이 결과는 업로드한 자료와 직접 수정한 금액을 기준으로 계산한 확인용 참고자료입니다.'} 실제 편성 시에는 해당 연도 예산편성 지침과 학교회계 기준을 함께 확인해 주세요.</p>
       </div>
     </aside>
   `;
@@ -1366,6 +1567,94 @@ document.querySelectorAll('.drop-zone').forEach((zone) => {
   zone.addEventListener('drop', (event) => handleFile(event.dataTransfer.files?.[0], slot));
 });
 
+
+const fileModeTab = document.querySelector('#fileModeTab');
+const manualModeTab = document.querySelector('#manualModeTab');
+const fileInputPanel = document.querySelector('#fileInputPanel');
+const manualInputPanel = document.querySelector('#manualInputPanel');
+const manualOperatingBudgetInput = document.querySelector('#manualOperatingBudget');
+const manualGeneralExpenseInput = document.querySelector('#manualGeneralExpense');
+const manualCalculateButton = document.querySelector('#manualCalculateButton');
+const manualClearButton = document.querySelector('#manualClearButton');
+const manualError = document.querySelector('#manualError');
+
+function syncInputModeUI() {
+  const manual = state.inputMode === 'manual';
+  fileModeTab.classList.toggle('is-active', !manual);
+  manualModeTab.classList.toggle('is-active', manual);
+  fileModeTab.setAttribute('aria-selected', String(!manual));
+  manualModeTab.setAttribute('aria-selected', String(manual));
+  fileInputPanel.classList.toggle('is-hidden', manual);
+  manualInputPanel.classList.toggle('is-hidden', !manual);
+}
+
+function setInputMode(mode) {
+  state.inputMode = mode;
+  state.budgetEditPanelOpen = false;
+  state.expenseEditPanelOpen = false;
+  syncInputModeUI();
+  clearMessage();
+  renderResults();
+}
+
+function wireManualMoneyInput(input) {
+  input.addEventListener('input', () => {
+    const caretAtEnd = input.selectionStart === input.value.length;
+    input.value = formatBudgetInput(input.value);
+    if (caretAtEnd) {
+      requestAnimationFrame(() => input.setSelectionRange(input.value.length, input.value.length));
+    }
+    manualError.textContent = '';
+  });
+}
+
+wireManualMoneyInput(manualOperatingBudgetInput);
+wireManualMoneyInput(manualGeneralExpenseInput);
+
+fileModeTab.addEventListener('click', () => setInputMode('file'));
+manualModeTab.addEventListener('click', () => setInputMode('manual'));
+
+manualCalculateButton.addEventListener('click', () => {
+  const operatingText = manualOperatingBudgetInput.value;
+  const expenseText = manualGeneralExpenseInput.value;
+  const operating = parseBudgetInput(operatingText);
+  const expense = parseBudgetInput(expenseText);
+
+  if (!/[0-9]/.test(operatingText) || operating <= 0) {
+    manualError.textContent = '학교운영경비를 입력해 주세요.';
+    manualOperatingBudgetInput.focus();
+    return;
+  }
+  if (!/[0-9]/.test(expenseText)) {
+    manualError.textContent = '일반업무추진비를 입력해 주세요.';
+    manualGeneralExpenseInput.focus();
+    return;
+  }
+
+  state.manualOperatingBudget = operating;
+  state.manualGeneralExpense = expense;
+  manualError.textContent = '';
+  renderResults();
+});
+
+manualClearButton.addEventListener('click', () => {
+  manualOperatingBudgetInput.value = '';
+  manualGeneralExpenseInput.value = '';
+  state.manualOperatingBudget = null;
+  state.manualGeneralExpense = null;
+  manualError.textContent = '';
+  renderResults();
+});
+
+[manualOperatingBudgetInput, manualGeneralExpenseInput].forEach((input) => {
+  input.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') manualCalculateButton.click();
+  });
+});
+
+syncInputModeUI();
+
+
 document.querySelector('#resetButton').addEventListener('click', () => {
   state.income = null;
   state.expense = null;
@@ -1373,6 +1662,13 @@ document.querySelector('#resetButton').addEventListener('click', () => {
   state.generalExpenseOverride = null;
   state.budgetEditPanelOpen = false;
   state.expenseEditPanelOpen = false;
+  state.inputMode = 'file';
+  state.manualOperatingBudget = null;
+  state.manualGeneralExpense = null;
+  manualOperatingBudgetInput.value = '';
+  manualGeneralExpenseInput.value = '';
+  manualError.textContent = '';
+  syncInputModeUI();
   document.querySelectorAll('input[type="file"]').forEach((input) => { input.value = ''; });
   setStatus('income');
   setStatus('expense');
@@ -1391,22 +1687,41 @@ criteriaToggle.addEventListener('click', () => {
 
 const helpModal = document.querySelector('#helpModal');
 const helpButton = document.querySelector('#helpButton');
+const downloadHelpButton = document.querySelector('#downloadHelpButton');
 const helpCloseButton = document.querySelector('#helpCloseButton');
 const helpConfirmButton = document.querySelector('#helpConfirmButton');
+let helpReturnFocus = helpButton;
 
-function openHelp() {
+function openHelp(targetId = null, opener = helpButton) {
+  helpReturnFocus = opener || helpButton;
   helpModal.classList.remove('is-hidden');
   document.body.classList.add('modal-open');
-  requestAnimationFrame(() => helpCloseButton.focus());
+
+  requestAnimationFrame(() => {
+    if (!targetId) {
+      helpCloseButton.focus();
+      return;
+    }
+
+    const target = document.getElementById(targetId);
+    const targetHeading = document.getElementById('helpDownloadTitle');
+    if (target) {
+      target.scrollIntoView({ block: 'start', behavior: 'smooth' });
+      target.classList.add('help-target-focus');
+      window.setTimeout(() => target.classList.remove('help-target-focus'), 900);
+    }
+    if (targetHeading) targetHeading.focus({ preventScroll: true });
+  });
 }
 
 function closeHelp() {
   helpModal.classList.add('is-hidden');
   document.body.classList.remove('modal-open');
-  helpButton.focus();
+  if (helpReturnFocus && typeof helpReturnFocus.focus === 'function') helpReturnFocus.focus();
 }
 
-helpButton.addEventListener('click', openHelp);
+helpButton.addEventListener('click', () => openHelp(null, helpButton));
+downloadHelpButton.addEventListener('click', () => openHelp('help-download-files', downloadHelpButton));
 helpCloseButton.addEventListener('click', closeHelp);
 helpConfirmButton.addEventListener('click', closeHelp);
 helpModal.addEventListener('click', (event) => {
