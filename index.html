@@ -46,8 +46,8 @@ main { padding-top: 56px; }
 .hero h1 { margin: 0; font-size: clamp(34px, 5vw, 52px); line-height: 1.08; letter-spacing: -.045em; }
 .hero h1 span { color: var(--primary); }
 .hero p { margin: 15px 0 0; color: var(--muted); font-size: 17px; line-height: 1.7; letter-spacing: -.02em; }
-.scope-note { width: 100%; margin-top: 16px; padding: 13px 15px; border: 1px solid #d9e1e7; border-radius: 12px; background: #eef7f5; color: #344054; font-size: 15px; line-height: 1.72; word-break: keep-all; overflow-wrap: normal; }
-.scope-note strong { color: var(--primary-dark); }
+.scope-note { width: 100%; margin-top: 18px; padding: 14px 16px; border: 1px solid #e3e7ec; border-radius: 12px; background: #ffffff; color: #475467; font-size: 15px; line-height: 1.72; word-break: keep-all; overflow-wrap: normal; box-shadow: 0 2px 8px rgba(15, 23, 42, .025); }
+.scope-note strong { color: var(--primary-dark); font-weight: 800; }
 
 .path-card { display: grid; grid-template-columns: 44px 1fr; gap: 17px; margin: 0 0 38px; padding: 22px 24px; border: 1px solid var(--border); border-radius: 18px; background: linear-gradient(135deg, #fafbfc, #ffffff); box-shadow: 0 4px 16px rgba(15, 23, 42, .035); }
 .path-icon { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 13px; color: var(--primary); background: #eef7f5; }
@@ -223,7 +223,10 @@ footer { display: flex; justify-content: space-between; margin-top: 42px; paddin
 .topbar-actions { display: flex; align-items: center; gap: 8px; }
 .version-badge { display: inline-flex; align-items: center; min-height: 30px; padding: 0 9px; border: 1px solid #e3e7ec; border-radius: 999px; background: #f7f8fa; color: #667085; font-size: 10.5px; font-weight: 800; font-variant-numeric: tabular-nums; }
 .help-button { color: var(--primary-dark); background: #f8fafb; border-color: #dbe5e2; }
-.compact-hero { max-width: 790px; margin-bottom: 26px; }
+.compact-hero { max-width: none; width: 100%; margin-bottom: 26px; }
+.compact-hero .hero-kicker,
+.compact-hero h1,
+.compact-hero > p { max-width: 790px; }
 .compact-hero h1 { font-size: clamp(30px, 4.4vw, 45px); }
 body.modal-open { overflow: hidden; }
 .modal-backdrop { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; padding: 22px; background: rgba(17, 24, 39, .46); backdrop-filter: blur(4px); }
@@ -282,7 +285,7 @@ footer { color: #667085; font-size: 13px; }
 
 
 
-/* 학교운영경비 직접 수정 — v0.1.10 */
+/* 학교운영경비·일반업무추진비 직접 수정 — v0.1.12 */
 .metric-label-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .metric-label-row > span { margin: 0; }
 .metric-edit-button {
@@ -654,7 +657,9 @@ const state = {
   expense: null,
   errors: [],
   operatingBudgetOverride: null,
+  generalExpenseOverride: null,
   budgetEditPanelOpen: false,
+  expenseEditPanelOpen: false,
 };
 
 app.innerHTML = `
@@ -675,7 +680,7 @@ app.innerHTML = `
         </span>
       </div>
       <div class="topbar-actions">
-        <span class="version-badge" title="현재 버전">v0.1.10</span>
+        <span class="version-badge" title="현재 버전">v0.1.12</span>
         <button class="ghost-button help-button" id="helpButton" type="button" aria-haspopup="dialog">도움말</button>
         <button class="ghost-button" id="resetButton" type="button">처음부터</button>
       </div>
@@ -794,7 +799,7 @@ app.innerHTML = `
 
     <footer>
       <span><strong>학돌랩</strong> · 제작 senvip</span>
-      <span>v0.1.10</span>
+      <span>v0.1.12</span>
     </footer>
     <div class="modal-backdrop is-hidden" id="helpModal" role="presentation">
       <section class="help-modal" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
@@ -826,7 +831,7 @@ app.innerHTML = `
             <span class="help-step">02</span>
             <div>
               <h3>두 파일을 업로드하면 자동으로 계산해요</h3>
-              <p>파일명이나 3월·7월 같은 월 표기는 사용하지 않습니다. <strong>업로드한 파일 안의 현재 예산액</strong>을 기준으로 판정합니다. 이후 교부액 변경 등으로 학교운영경비가 달라졌다면 결과 화면의 <strong>수정하기</strong>에서 최종 금액을 직접 입력해 다시 계산할 수 있습니다.</p>
+              <p>파일명이나 3월·7월 같은 월 표기는 사용하지 않습니다. <strong>업로드한 파일 안의 현재 예산액</strong>을 기준으로 판정합니다. 이후 교부액 변경이나 추경 검토 등으로 금액이 달라졌다면 결과 화면의 <strong>수정하기</strong>에서 학교운영경비 또는 일반업무추진비의 최종 금액을 직접 입력해 다시 계산할 수 있습니다.</p>
             </div>
           </section>
 
@@ -855,7 +860,7 @@ app.innerHTML = `
           </section>
         </div>
         <div class="help-modal-foot">
-          <span>업추비 3% · v0.1.10</span>
+          <span>업추비 3% · v0.1.12</span>
           <button class="primary-button" id="helpConfirmButton" type="button">확인</button>
         </div>
       </section>
@@ -993,11 +998,13 @@ function renderResults() {
   }
 
   const baseOperatingBudget = Math.round(state.income.data.total);
+  const baseGeneralExpense = Math.round(state.expense.data.amount);
   const effectiveOperatingBudget = state.operatingBudgetOverride ?? baseOperatingBudget;
+  const effectiveGeneralExpense = state.generalExpenseOverride ?? baseGeneralExpense;
 
   let result;
   try {
-    result = calculateStatus(effectiveOperatingBudget, state.expense.data.amount);
+    result = calculateStatus(effectiveOperatingBudget, effectiveGeneralExpense);
   } catch (error) {
     showMessage(error.message, 'error');
     return;
@@ -1012,7 +1019,8 @@ function renderResults() {
   const diffLabel = result.isCompliant
     ? `${formatWon(result.difference)} 여유`
     : `기준보다 ${formatWon(result.difference)} 초과`;
-  const isEdited = state.operatingBudgetOverride !== null;
+  const isBudgetEdited = state.operatingBudgetOverride !== null;
+  const isExpenseEdited = state.generalExpenseOverride !== null;
 
   resultSection.innerHTML = `
     <div class="section-heading result-heading">
@@ -1045,7 +1053,7 @@ function renderResults() {
         </div>
         <strong>${formatWon(result.operatingBudget)}</strong>
         <small>${formatKoreanMoney(result.operatingBudget)}</small>
-        ${isEdited ? `
+        ${isBudgetEdited ? `
           <div class="metric-edited-summary">파일 기준 ${formatWon(baseOperatingBudget)} · <strong>직접 수정됨</strong></div>
         ` : ''}
       </div>
@@ -1055,9 +1063,15 @@ function renderResults() {
         <small>${formatKoreanMoney(result.maxAllowed)}</small>
       </div>
       <div class="metric">
-        <span>일반업무추진비</span>
+        <div class="metric-label-row">
+          <span>일반업무추진비</span>
+          <button class="metric-edit-button" id="expenseEditButton" type="button" aria-expanded="${state.expenseEditPanelOpen}">수정하기</button>
+        </div>
         <strong>${formatWon(result.generalExpense)}</strong>
         <small>${formatKoreanMoney(result.generalExpense)}</small>
+        ${isExpenseEdited ? `
+          <div class="metric-edited-summary">파일 기준 ${formatWon(baseGeneralExpense)} · <strong>직접 수정됨</strong></div>
+        ` : ''}
       </div>
     </article>
 
@@ -1078,12 +1092,37 @@ function renderResults() {
           </span>
         </label>
         <button class="edit-budget-apply" id="applyBudgetOverride" type="button">반영</button>
-        <button class="edit-budget-reset" id="resetBudgetOverride" type="button" ${isEdited ? '' : 'disabled'}>파일 금액으로</button>
+        <button class="edit-budget-reset" id="resetBudgetOverride" type="button" ${isBudgetEdited ? '' : 'disabled'}>파일 금액으로</button>
       </div>
       <div class="edit-budget-preview">
-        파일 기준 <strong>${formatWon(baseOperatingBudget)}</strong>${isEdited ? ` → 현재 적용 <strong>${formatWon(result.operatingBudget)}</strong>` : ' · 현재 파일 금액을 그대로 사용 중'}
+        파일 기준 <strong>${formatWon(baseOperatingBudget)}</strong>${isBudgetEdited ? ` → 현재 적용 <strong>${formatWon(result.operatingBudget)}</strong>` : ' · 현재 파일 금액을 그대로 사용 중'}
       </div>
       <p class="budget-edit-error" id="budgetEditError" aria-live="polite"></p>
+    </div>
+
+    <div class="budget-edit-panel ${state.expenseEditPanelOpen ? '' : 'is-hidden'}" id="expenseEditPanel">
+      <div class="budget-edit-head">
+        <div>
+          <strong>일반업무추진비 수정</strong>
+          <p>추경 검토 등으로 실제 편성 예정액이 파일과 다르면, 수정된 최종 일반업무추진비를 직접 입력해 다시 계산합니다.</p>
+        </div>
+        <button class="budget-edit-close" id="expenseEditClose" type="button" aria-label="일반업무추진비 수정 닫기">×</button>
+      </div>
+      <div class="budget-edit-form">
+        <label class="edit-budget-label">
+          <span>수정 금액</span>
+          <span class="edit-budget-input-wrap">
+            <input id="expenseOverrideInput" type="text" inputmode="numeric" autocomplete="off" value="${result.generalExpense.toLocaleString('ko-KR')}" aria-label="수정된 일반업무추진비" />
+            <span>원</span>
+          </span>
+        </label>
+        <button class="edit-budget-apply" id="applyExpenseOverride" type="button">반영</button>
+        <button class="edit-budget-reset" id="resetExpenseOverride" type="button" ${isExpenseEdited ? '' : 'disabled'}>파일 금액으로</button>
+      </div>
+      <div class="edit-budget-preview">
+        파일 기준 <strong>${formatWon(baseGeneralExpense)}</strong>${isExpenseEdited ? ` → 현재 적용 <strong>${formatWon(result.generalExpense)}</strong>` : ' · 현재 파일 금액을 그대로 사용 중'}
+      </div>
+      <p class="budget-edit-error" id="expenseEditError" aria-live="polite"></p>
     </div>
 
     <div class="formula-card">
@@ -1094,7 +1133,7 @@ function renderResults() {
     <div class="details-stack">
       <details>
         <summary>
-          <span><strong>학교운영경비 산출내역</strong><small>8개 원가통계비목 합계 ${formatWon(baseOperatingBudget)}${isEdited ? ` · 수정 후 ${formatWon(result.operatingBudget)}` : ''}</small></span>
+          <span><strong>학교운영경비 산출내역</strong><small>8개 원가통계비목 합계 ${formatWon(baseOperatingBudget)}${isBudgetEdited ? ` · 수정 후 ${formatWon(result.operatingBudget)}` : ''}</small></span>
           <span class="summary-action">펼치기</span>
         </summary>
         <div class="detail-body">
@@ -1106,20 +1145,21 @@ function renderResults() {
               </div>
             `).join('')}
             <div class="detail-row total"><span>파일 기준 학교운영경비</span><strong>${formatWon(baseOperatingBudget)}</strong></div>
-            ${isEdited ? `<div class="detail-row total"><span>직접 수정한 학교운영경비</span><strong>${formatWon(result.operatingBudget)}</strong></div>` : ''}
+            ${isBudgetEdited ? `<div class="detail-row total"><span>직접 수정한 학교운영경비</span><strong>${formatWon(result.operatingBudget)}</strong></div>` : ''}
           </div>
-          <p class="detail-note">전체 세입예산이 아니라, 위 8개 원가통계비목의 <strong>예산액</strong>만 합산합니다.${isEdited ? ' 직접 입력한 수정 금액은 원본 파일을 바꾸지 않고 이번 계산에만 적용합니다.' : ''}</p>
+          <p class="detail-note">전체 세입예산이 아니라, 위 8개 원가통계비목의 <strong>예산액</strong>만 합산합니다.${isBudgetEdited ? ' 직접 입력한 수정 금액은 원본 파일을 바꾸지 않고 이번 계산에만 적용합니다.' : ''}</p>
         </div>
       </details>
 
       <details>
         <summary>
-          <span><strong>일반업무추진비 산출내역</strong><small>B200101만 계산 · ${formatWon(result.generalExpense)}</small></span>
+          <span><strong>일반업무추진비 산출내역</strong><small>B200101만 계산 · 파일 기준 ${formatWon(baseGeneralExpense)}${isExpenseEdited ? ` · 수정 후 ${formatWon(result.generalExpense)}` : ''}</small></span>
           <span class="summary-action">펼치기</span>
         </summary>
         <div class="detail-body expense-detail">
           <div class="rule-line include"><span>포함</span><strong>업무추진비 › 일반업무추진비 › 일반업무추진비 (B200101)</strong></div>
           <div class="rule-line exclude"><span>제외</span><strong>직책급업무수행경비 · 목적사업업무추진비</strong></div>
+          ${isExpenseEdited ? `<div class="edit-budget-preview">파일 기준 <strong>${formatWon(baseGeneralExpense)}</strong> → 현재 적용 <strong>${formatWon(result.generalExpense)}</strong></div>` : ''}
         </div>
       </details>
     </div>
@@ -1152,17 +1192,32 @@ function formatBudgetInput(value) {
 }
 
 function wireBudgetEditControls() {
-  const openButton = document.querySelector('#budgetEditButton');
-  const closeButton = document.querySelector('#budgetEditClose');
-  const input = document.querySelector('#budgetOverrideInput');
-  const applyButton = document.querySelector('#applyBudgetOverride');
-  const resetButton = document.querySelector('#resetBudgetOverride');
-  const errorEl = document.querySelector('#budgetEditError');
+  const budgetOpenButton = document.querySelector('#budgetEditButton');
+  const budgetCloseButton = document.querySelector('#budgetEditClose');
+  const budgetInput = document.querySelector('#budgetOverrideInput');
+  const budgetApplyButton = document.querySelector('#applyBudgetOverride');
+  const budgetResetButton = document.querySelector('#resetBudgetOverride');
+  const budgetErrorEl = document.querySelector('#budgetEditError');
 
-  if (!openButton) return;
+  const expenseOpenButton = document.querySelector('#expenseEditButton');
+  const expenseCloseButton = document.querySelector('#expenseEditClose');
+  const expenseInput = document.querySelector('#expenseOverrideInput');
+  const expenseApplyButton = document.querySelector('#applyExpenseOverride');
+  const expenseResetButton = document.querySelector('#resetExpenseOverride');
+  const expenseErrorEl = document.querySelector('#expenseEditError');
 
-  openButton.addEventListener('click', () => {
+  const wireFormattedInput = (input, errorEl) => {
+    input?.addEventListener('input', () => {
+      const cursorAtEnd = input.selectionStart === input.value.length;
+      input.value = formatBudgetInput(input.value);
+      if (cursorAtEnd) input.setSelectionRange(input.value.length, input.value.length);
+      if (errorEl) errorEl.textContent = '';
+    });
+  };
+
+  budgetOpenButton?.addEventListener('click', () => {
     state.budgetEditPanelOpen = !state.budgetEditPanelOpen;
+    state.expenseEditPanelOpen = false;
     renderResults();
     if (state.budgetEditPanelOpen) {
       requestAnimationFrame(() => {
@@ -1173,37 +1228,69 @@ function wireBudgetEditControls() {
     }
   });
 
-  closeButton?.addEventListener('click', () => {
+  budgetCloseButton?.addEventListener('click', () => {
     state.budgetEditPanelOpen = false;
     renderResults();
   });
 
-  input?.addEventListener('input', () => {
-    const cursorAtEnd = input.selectionStart === input.value.length;
-    input.value = formatBudgetInput(input.value);
-    if (cursorAtEnd) input.setSelectionRange(input.value.length, input.value.length);
-    if (errorEl) errorEl.textContent = '';
+  wireFormattedInput(budgetInput, budgetErrorEl);
+  budgetInput?.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') budgetApplyButton?.click();
   });
-
-  input?.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter') applyButton?.click();
-  });
-
-  applyButton?.addEventListener('click', () => {
-    const amount = parseBudgetInput(input?.value);
+  budgetApplyButton?.addEventListener('click', () => {
+    const amount = parseBudgetInput(budgetInput?.value);
     if (!Number.isFinite(amount) || amount <= 0) {
-      if (errorEl) errorEl.textContent = '수정된 학교운영경비 금액을 입력해 주세요.';
-      input?.focus();
+      if (budgetErrorEl) budgetErrorEl.textContent = '수정된 학교운영경비 금액을 입력해 주세요.';
+      budgetInput?.focus();
       return;
     }
     state.operatingBudgetOverride = Math.round(amount);
     state.budgetEditPanelOpen = true;
     renderResults();
   });
-
-  resetButton?.addEventListener('click', () => {
+  budgetResetButton?.addEventListener('click', () => {
     state.operatingBudgetOverride = null;
     state.budgetEditPanelOpen = true;
+    renderResults();
+  });
+
+  expenseOpenButton?.addEventListener('click', () => {
+    state.expenseEditPanelOpen = !state.expenseEditPanelOpen;
+    state.budgetEditPanelOpen = false;
+    renderResults();
+    if (state.expenseEditPanelOpen) {
+      requestAnimationFrame(() => {
+        const nextInput = document.querySelector('#expenseOverrideInput');
+        nextInput?.focus();
+        nextInput?.select();
+      });
+    }
+  });
+
+  expenseCloseButton?.addEventListener('click', () => {
+    state.expenseEditPanelOpen = false;
+    renderResults();
+  });
+
+  wireFormattedInput(expenseInput, expenseErrorEl);
+  expenseInput?.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') expenseApplyButton?.click();
+  });
+  expenseApplyButton?.addEventListener('click', () => {
+    const hasAmountInput = /[0-9]/.test(expenseInput?.value || '');
+    const amount = parseBudgetInput(expenseInput?.value);
+    if (!hasAmountInput || !Number.isFinite(amount) || amount < 0) {
+      if (expenseErrorEl) expenseErrorEl.textContent = '수정된 일반업무추진비 금액을 입력해 주세요.';
+      expenseInput?.focus();
+      return;
+    }
+    state.generalExpenseOverride = Math.round(amount);
+    state.expenseEditPanelOpen = true;
+    renderResults();
+  });
+  expenseResetButton?.addEventListener('click', () => {
+    state.generalExpenseOverride = null;
+    state.expenseEditPanelOpen = true;
     renderResults();
   });
 }
@@ -1227,6 +1314,10 @@ async function handleFile(file, intendedSlot) {
     if (parsed.type === 'income') {
       state.operatingBudgetOverride = null;
       state.budgetEditPanelOpen = false;
+    }
+    if (parsed.type === 'expense') {
+      state.generalExpenseOverride = null;
+      state.expenseEditPanelOpen = false;
     }
     setStatus(parsed.type);
 
@@ -1279,7 +1370,9 @@ document.querySelector('#resetButton').addEventListener('click', () => {
   state.income = null;
   state.expense = null;
   state.operatingBudgetOverride = null;
+  state.generalExpenseOverride = null;
   state.budgetEditPanelOpen = false;
+  state.expenseEditPanelOpen = false;
   document.querySelectorAll('input[type="file"]').forEach((input) => { input.value = ''; });
   setStatus('income');
   setStatus('expense');
