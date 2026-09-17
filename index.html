@@ -159,37 +159,40 @@ details[open] .summary-action::after { content: '접기'; font-size: 11px; }
 
 .result-guidance {
   display: grid;
-  grid-template-columns: 22px minmax(0, 1fr);
-  gap: 10px;
+  grid-template-columns: 28px minmax(0, 1fr);
+  gap: 12px;
   align-items: start;
   margin-top: 16px;
-  padding: 14px 16px;
-  border: 1px solid #eadb9c;
-  border-radius: 13px;
-  background: #fff9e8;
-  color: #6f6548;
+  padding: 16px 18px;
+  border: 1px solid #d8e0f5;
+  border-radius: 14px;
+  background: #f8faff;
+  color: #465166;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.75);
 }
 .result-guidance .guidance-icon {
-  width: 22px;
-  height: 22px;
+  width: 28px;
+  height: 28px;
   display: grid;
   place-items: center;
-  border-radius: 50%;
-  background: #f5e7a8;
-  color: #735f18;
-  font-size: 12px;
+  border-radius: 10px;
+  background: #eef2ff;
+  color: #3159d8;
+  font-size: 13px;
   font-weight: 900;
 }
 .result-guidance strong {
   display: block;
-  margin-bottom: 3px;
-  color: #5f5121;
-  font-size: 11.5px;
+  margin-bottom: 4px;
+  color: #3159d8;
+  font-size: 12.5px;
+  font-weight: 850;
 }
 .result-guidance p {
   margin: 0;
-  font-size: 11.5px;
-  line-height: 1.65;
+  color: #465166;
+  font-size: 12px;
+  line-height: 1.7;
 }
 
 .criteria-card { margin-top: 42px; border: 1px solid #e3e7ec; border-radius: 16px; background: rgba(255,255,255,.78); overflow: hidden; }
@@ -262,16 +265,80 @@ footer strong { color: #667085; font-weight: 800; }
 .progress-labels, .metric small, .formula-card span, summary small, .summary-action,
 .detail-note, .criteria-body p, .pill-list span, .app-title-copy small, .version-badge,
 .help-eyebrow, .help-step, .help-file-grid span, .help-figure figcaption, .help-modal-foot span,
-.result-guidance strong, .result-guidance p { font-size: 13px; }
+.result-guidance strong { font-size: 12.5px; }
+.result-guidance p { font-size: 12px; }
 .progress-track { height: 11px; }
-.result-guidance { border-color: #d5b94c; background: #fff5cc; color: #51430e; }
-.result-guidance .guidance-icon { background: #f1d96b; color: #4b3d08; }
-.result-guidance strong { color: #443707; }
 .criteria-card, details, .upload-card, .metrics-card { border-color: #d9e0e6; }
 .drop-zone { border-color: #8dbeb6; background: #f8fafb; color: #475467; }
 footer { color: #667085; font-size: 13px; }
 .app-title-copy small, .version-badge, .privacy-note, .metric span, .metric small, summary small,
 .criteria-body p, .help-section p, .help-file-grid span, .help-figure figcaption, .help-modal-foot span { color: #667085; }
+
+
+
+/* 학교운영경비 직접 수정 — v0.1.8 */
+.metric-label-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.metric-label-row > span { margin: 0; }
+.metric-edit-button {
+  flex: 0 0 auto;
+  min-height: 28px;
+  padding: 0 9px;
+  border: 1px solid #d6dde5;
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--primary-dark);
+  font-size: 11.5px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.metric-edit-button:hover { border-color: #b8c4ce; background: #fafbfc; }
+.metric-edited-summary {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #eef1f4;
+  color: #667085;
+  font-size: 11.5px;
+  line-height: 1.55;
+  text-align: right;
+}
+.metric-edited-summary strong { display: inline; margin: 0; color: var(--primary-dark); font-size: inherit; letter-spacing: 0; white-space: normal; }
+
+.budget-edit-panel {
+  margin-top: 12px;
+  padding: 15px 16px;
+  border: 1px solid #dde3e9;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, .035);
+}
+.budget-edit-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }
+.budget-edit-head strong { display: block; color: #344054; font-size: 13px; }
+.budget-edit-head p { margin: 4px 0 0; color: #667085; font-size: 11.5px; line-height: 1.6; }
+.budget-edit-close { flex: 0 0 auto; border: 0; background: transparent; color: #98a2b3; font-size: 20px; line-height: 1; cursor: pointer; padding: 2px 4px; }
+.budget-edit-form { display: grid; grid-template-columns: minmax(220px, 1fr) auto auto; gap: 8px; align-items: end; margin-top: 13px; }
+.edit-budget-label { display: grid; gap: 5px; }
+.edit-budget-label > span { color: #667085; font-size: 10.5px; font-weight: 800; }
+.edit-budget-input-wrap {
+  display: flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 10px;
+  border: 1px solid #d7dee6;
+  border-radius: 10px;
+  background: #ffffff;
+}
+.edit-budget-input-wrap:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(8, 117, 108, .09); }
+.edit-budget-input-wrap input { width: 100%; min-width: 0; border: 0; outline: 0; background: transparent; color: #344054; font-size: 13px; font-weight: 750; text-align: right; }
+.edit-budget-input-wrap span { margin-left: 6px; color: #667085; font-size: 12px; }
+.edit-budget-apply, .edit-budget-reset { min-height: 40px; padding: 0 13px; border-radius: 10px; font-size: 12px; font-weight: 800; cursor: pointer; }
+.edit-budget-apply { border: 0; background: var(--primary); color: #ffffff; }
+.edit-budget-apply:hover { background: var(--primary-dark); }
+.edit-budget-reset { border: 1px solid #d9e0e7; background: #ffffff; color: #667085; }
+.edit-budget-reset:hover { border-color: #c6d0d9; background: #fafbfc; }
+.edit-budget-reset:disabled { opacity: .42; cursor: default; }
+.edit-budget-preview { margin-top: 10px; padding: 9px 11px; border-radius: 10px; background: #f7f8fa; color: #667085; font-size: 11.5px; line-height: 1.55; }
+.edit-budget-preview strong { color: var(--primary-dark); }
+.budget-edit-error { min-height: 18px; margin: 7px 0 0; color: #a1433d; font-size: 11.5px; line-height: 1.5; }
 
 @media (max-width: 760px) {
   .page-shell { padding: 0 18px 28px; }
@@ -311,6 +378,8 @@ footer { color: #667085; font-size: 13px; }
   .help-section { grid-template-columns: 36px minmax(0, 1fr); gap: 10px; padding: 17px 0; }
   .help-file-grid { grid-template-columns: 1fr; }
   .help-modal-foot { padding: 11px 16px; }
+  .budget-edit-form { grid-template-columns: 1fr; align-items: stretch; }
+  .edit-budget-apply, .edit-budget-reset { width: 100%; }
 }
 
 @media (max-width: 420px) {
@@ -578,6 +647,8 @@ const state = {
   income: null,
   expense: null,
   errors: [],
+  operatingBudgetOverride: null,
+  budgetEditPanelOpen: false,
 };
 
 app.innerHTML = `
@@ -598,7 +669,7 @@ app.innerHTML = `
         </span>
       </div>
       <div class="topbar-actions">
-        <span class="version-badge" title="현재 버전">v0.1.6</span>
+        <span class="version-badge" title="현재 버전">v0.1.8</span>
         <button class="ghost-button help-button" id="helpButton" type="button" aria-haspopup="dialog">도움말</button>
         <button class="ghost-button" id="resetButton" type="button">처음부터</button>
       </div>
@@ -716,8 +787,8 @@ app.innerHTML = `
     </main>
 
     <footer>
-      <span>제작 <strong>senvip</strong> · upchubi-3per</span>
-      <span>v0.1.6</span>
+      <span><strong>학돌랩</strong> · 제작 senvip</span>
+      <span>v0.1.8</span>
     </footer>
     <div class="modal-backdrop is-hidden" id="helpModal" role="presentation">
       <section class="help-modal" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
@@ -749,7 +820,7 @@ app.innerHTML = `
             <span class="help-step">02</span>
             <div>
               <h3>두 파일을 업로드하면 자동으로 계산해요</h3>
-              <p>파일명이나 3월·7월 같은 월 표기는 사용하지 않습니다. <strong>업로드한 파일 안의 현재 예산액</strong>을 기준으로 판정합니다.</p>
+              <p>파일명이나 3월·7월 같은 월 표기는 사용하지 않습니다. <strong>업로드한 파일 안의 현재 예산액</strong>을 기준으로 판정합니다. 이후 교부액 변경 등으로 학교운영경비가 달라졌다면 결과 화면의 <strong>수정하기</strong>에서 최종 금액을 직접 입력해 다시 계산할 수 있습니다.</p>
             </div>
           </section>
 
@@ -778,7 +849,7 @@ app.innerHTML = `
           </section>
         </div>
         <div class="help-modal-foot">
-          <span>업추비 3% · v0.1.6</span>
+          <span>업추비 3% · v0.1.8</span>
           <button class="primary-button" id="helpConfirmButton" type="button">확인</button>
         </div>
       </section>
@@ -915,9 +986,12 @@ function renderResults() {
     return;
   }
 
+  const baseOperatingBudget = Math.round(state.income.data.total);
+  const effectiveOperatingBudget = state.operatingBudgetOverride ?? baseOperatingBudget;
+
   let result;
   try {
-    result = calculateStatus(state.income.data.total, state.expense.data.amount);
+    result = calculateStatus(effectiveOperatingBudget, state.expense.data.amount);
   } catch (error) {
     showMessage(error.message, 'error');
     return;
@@ -932,6 +1006,7 @@ function renderResults() {
   const diffLabel = result.isCompliant
     ? `${formatWon(result.difference)} 여유`
     : `기준보다 ${formatWon(result.difference)} 초과`;
+  const isEdited = state.operatingBudgetOverride !== null;
 
   resultSection.innerHTML = `
     <div class="section-heading result-heading">
@@ -958,9 +1033,15 @@ function renderResults() {
 
     <article class="metrics-card">
       <div class="metric">
-        <span>학교운영경비</span>
+        <div class="metric-label-row">
+          <span>학교운영경비</span>
+          <button class="metric-edit-button" id="budgetEditButton" type="button" aria-expanded="${state.budgetEditPanelOpen}">수정하기</button>
+        </div>
         <strong>${formatWon(result.operatingBudget)}</strong>
         <small>${formatKoreanMoney(result.operatingBudget)}</small>
+        ${isEdited ? `
+          <div class="metric-edited-summary">파일 기준 ${formatWon(baseOperatingBudget)} · <strong>직접 수정됨</strong></div>
+        ` : ''}
       </div>
       <div class="metric featured">
         <span>3% 편성한도</span>
@@ -974,6 +1055,31 @@ function renderResults() {
       </div>
     </article>
 
+    <div class="budget-edit-panel ${state.budgetEditPanelOpen ? '' : 'is-hidden'}" id="budgetEditPanel">
+      <div class="budget-edit-head">
+        <div>
+          <strong>학교운영경비 수정</strong>
+          <p>교부액 변경 등으로 실제 편성 예정액이 파일과 다르면, 수정된 최종 학교운영경비를 직접 입력해 다시 계산합니다.</p>
+        </div>
+        <button class="budget-edit-close" id="budgetEditClose" type="button" aria-label="학교운영경비 수정 닫기">×</button>
+      </div>
+      <div class="budget-edit-form">
+        <label class="edit-budget-label">
+          <span>수정 금액</span>
+          <span class="edit-budget-input-wrap">
+            <input id="budgetOverrideInput" type="text" inputmode="numeric" autocomplete="off" value="${result.operatingBudget.toLocaleString('ko-KR')}" aria-label="수정된 학교운영경비" />
+            <span>원</span>
+          </span>
+        </label>
+        <button class="edit-budget-apply" id="applyBudgetOverride" type="button">반영</button>
+        <button class="edit-budget-reset" id="resetBudgetOverride" type="button" ${isEdited ? '' : 'disabled'}>파일 금액으로</button>
+      </div>
+      <div class="edit-budget-preview">
+        파일 기준 <strong>${formatWon(baseOperatingBudget)}</strong>${isEdited ? ` → 현재 적용 <strong>${formatWon(result.operatingBudget)}</strong>` : ' · 현재 파일 금액을 그대로 사용 중'}
+      </div>
+      <p class="budget-edit-error" id="budgetEditError" aria-live="polite"></p>
+    </div>
+
     <div class="formula-card">
       <span>계산식</span>
       <strong>${result.generalExpense.toLocaleString('ko-KR')} ÷ ${result.operatingBudget.toLocaleString('ko-KR')} × 100 = ${ratio2}%</strong>
@@ -982,7 +1088,7 @@ function renderResults() {
     <div class="details-stack">
       <details>
         <summary>
-          <span><strong>학교운영경비 산출내역</strong><small>8개 원가통계비목 합계 ${formatWon(result.operatingBudget)}</small></span>
+          <span><strong>학교운영경비 산출내역</strong><small>8개 원가통계비목 합계 ${formatWon(baseOperatingBudget)}${isEdited ? ` · 수정 후 ${formatWon(result.operatingBudget)}` : ''}</small></span>
           <span class="summary-action">펼치기</span>
         </summary>
         <div class="detail-body">
@@ -993,9 +1099,10 @@ function renderResults() {
                 <strong>${formatWon(item.amount)}</strong>
               </div>
             `).join('')}
-            <div class="detail-row total"><span>학교운영경비</span><strong>${formatWon(result.operatingBudget)}</strong></div>
+            <div class="detail-row total"><span>파일 기준 학교운영경비</span><strong>${formatWon(baseOperatingBudget)}</strong></div>
+            ${isEdited ? `<div class="detail-row total"><span>직접 수정한 학교운영경비</span><strong>${formatWon(result.operatingBudget)}</strong></div>` : ''}
           </div>
-          <p class="detail-note">전체 세입예산이 아니라, 위 8개 원가통계비목의 <strong>예산액</strong>만 합산합니다.</p>
+          <p class="detail-note">전체 세입예산이 아니라, 위 8개 원가통계비목의 <strong>예산액</strong>만 합산합니다.${isEdited ? ' 직접 입력한 수정 금액은 원본 파일을 바꾸지 않고 이번 계산에만 적용합니다.' : ''}</p>
         </div>
       </details>
 
@@ -1015,14 +1122,83 @@ function renderResults() {
       <span class="guidance-icon" aria-hidden="true">i</span>
       <div>
         <strong>안내</strong>
-        <p>이 결과는 업로드한 자료를 기준으로 계산한 확인용 참고자료입니다. 실제 편성 시에는 해당 연도 예산편성 지침과 학교회계 기준을 함께 확인해 주세요.</p>
+        <p>이 결과는 업로드한 자료와 직접 수정한 금액을 기준으로 계산한 확인용 참고자료입니다. 실제 편성 시에는 해당 연도 예산편성 지침과 학교회계 기준을 함께 확인해 주세요.</p>
       </div>
     </aside>
   `;
 
   resultSection.classList.remove('is-hidden');
+  wireBudgetEditControls();
   requestAnimationFrame(() => {
     resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+}
+
+function parseBudgetInput(value) {
+  const digits = String(value || '').replace(/[^0-9]/g, '');
+  if (!digits) return 0;
+  return Number(digits);
+}
+
+function formatBudgetInput(value) {
+  const amount = parseBudgetInput(value);
+  return amount ? amount.toLocaleString('ko-KR') : '';
+}
+
+function wireBudgetEditControls() {
+  const openButton = document.querySelector('#budgetEditButton');
+  const closeButton = document.querySelector('#budgetEditClose');
+  const input = document.querySelector('#budgetOverrideInput');
+  const applyButton = document.querySelector('#applyBudgetOverride');
+  const resetButton = document.querySelector('#resetBudgetOverride');
+  const errorEl = document.querySelector('#budgetEditError');
+
+  if (!openButton) return;
+
+  openButton.addEventListener('click', () => {
+    state.budgetEditPanelOpen = !state.budgetEditPanelOpen;
+    renderResults();
+    if (state.budgetEditPanelOpen) {
+      requestAnimationFrame(() => {
+        const nextInput = document.querySelector('#budgetOverrideInput');
+        nextInput?.focus();
+        nextInput?.select();
+      });
+    }
+  });
+
+  closeButton?.addEventListener('click', () => {
+    state.budgetEditPanelOpen = false;
+    renderResults();
+  });
+
+  input?.addEventListener('input', () => {
+    const cursorAtEnd = input.selectionStart === input.value.length;
+    input.value = formatBudgetInput(input.value);
+    if (cursorAtEnd) input.setSelectionRange(input.value.length, input.value.length);
+    if (errorEl) errorEl.textContent = '';
+  });
+
+  input?.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') applyButton?.click();
+  });
+
+  applyButton?.addEventListener('click', () => {
+    const amount = parseBudgetInput(input?.value);
+    if (!Number.isFinite(amount) || amount <= 0) {
+      if (errorEl) errorEl.textContent = '수정된 학교운영경비 금액을 입력해 주세요.';
+      input?.focus();
+      return;
+    }
+    state.operatingBudgetOverride = Math.round(amount);
+    state.budgetEditPanelOpen = true;
+    renderResults();
+  });
+
+  resetButton?.addEventListener('click', () => {
+    state.operatingBudgetOverride = null;
+    state.budgetEditPanelOpen = true;
+    renderResults();
   });
 }
 
@@ -1042,6 +1218,10 @@ async function handleFile(file, intendedSlot) {
   try {
     const parsed = await parseFile(file);
     state[parsed.type] = parsed;
+    if (parsed.type === 'income') {
+      state.operatingBudgetOverride = null;
+      state.budgetEditPanelOpen = false;
+    }
     setStatus(parsed.type);
 
     if (parsed.type !== intendedSlot) {
@@ -1092,6 +1272,8 @@ document.querySelectorAll('.drop-zone').forEach((zone) => {
 document.querySelector('#resetButton').addEventListener('click', () => {
   state.income = null;
   state.expense = null;
+  state.operatingBudgetOverride = null;
+  state.budgetEditPanelOpen = false;
   document.querySelectorAll('input[type="file"]').forEach((input) => { input.value = ''; });
   setStatus('income');
   setStatus('expense');
