@@ -420,7 +420,7 @@ footer { color: #667085; font-size: 13px; }
 
 
 
-/* 학교운영경비·일반업무추진비 직접 수정 — v0.1.17 */
+/* 학교운영경비 항목별 보정·일반업무추진비 직접 수정 — v0.1.18 */
 .metric-label-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .metric-label-row > span { margin: 0; }
 .metric-edit-button {
@@ -484,6 +484,43 @@ footer { color: #667085; font-size: 13px; }
 .edit-budget-preview strong { color: var(--primary-dark); }
 .budget-edit-error { min-height: 18px; margin: 7px 0 0; color: #a1433d; font-size: 11.5px; line-height: 1.5; }
 
+
+/* 학교운영경비 산출내역 항목별 계산값 보정 — v0.1.18 */
+.detail-row.editable { position: relative; min-height: 48px; padding: 5px 0; }
+.detail-row.editable.is-edited { margin-inline: -10px; padding-inline: 10px; border-radius: 9px; background: #f8faff; }
+.detail-item-name { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; min-width: 0; }
+.detail-edited-badge { display: inline-flex; align-items: center; min-height: 20px; padding: 0 7px; border-radius: 999px; background: #e8edff; color: var(--primary-dark); font-size: 10.5px !important; font-weight: 850; }
+.detail-value-actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; min-width: 0; }
+.detail-value-actions > strong { min-width: 118px; }
+.detail-edit-button,
+.detail-apply-button,
+.detail-cancel-button,
+.detail-reset-all {
+  flex: 0 0 auto;
+  min-height: 30px;
+  padding: 0 10px;
+  border: 1px solid #d6dde5;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--primary-dark);
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.detail-edit-button:hover,
+.detail-cancel-button:hover,
+.detail-reset-all:hover { border-color: #b8c4ce; background: #fafbfc; }
+.detail-apply-button { border-color: var(--primary); background: var(--primary); color: #fff; }
+.detail-apply-button:hover { background: var(--primary-dark); border-color: var(--primary-dark); }
+.detail-inline-edit { display: flex; align-items: center; justify-content: flex-end; gap: 6px; min-width: 0; }
+.detail-inline-input-wrap { display: flex; align-items: center; width: 178px; min-height: 38px; padding: 0 9px; border: 1px solid #cbd4de; border-radius: 9px; background: #fff; }
+.detail-inline-input-wrap:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(49, 89, 216, .10); }
+.detail-inline-input-wrap input { width: 100%; min-width: 0; border: 0; outline: 0; background: transparent; color: #344054; font-size: 13px; font-weight: 800; text-align: right; font-variant-numeric: tabular-nums; }
+.detail-inline-input-wrap > span { margin-left: 5px; color: #7a8594; font-size: 11px; }
+.detail-original-value { grid-column: 2; margin-top: -5px; color: #8a94a3 !important; font-size: 10.5px !important; text-align: right; }
+.detail-edit-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 11px 0 4px; color: #7a8594; font-size: 11.5px; }
+.detail-reset-all { color: #667085; }
+
 @media (max-width: 760px) {
   .page-shell { padding: 0 18px 28px; }
   .topbar { height: auto; min-height: 68px; gap: 12px; padding: 10px 0; }
@@ -526,6 +563,13 @@ footer { color: #667085; font-size: 13px; }
   .help-modal-foot { padding: 11px 16px; }
   .budget-edit-form { grid-template-columns: 1fr; align-items: stretch; }
   .edit-budget-apply, .edit-budget-reset { width: 100%; }
+  .detail-row.editable.is-editing { grid-template-columns: 1fr; gap: 7px; padding-block: 10px; }
+  .detail-row.editable.is-editing .detail-value-actions { width: 100%; }
+  .detail-row.editable.is-editing .detail-inline-edit { width: 100%; flex-wrap: wrap; }
+  .detail-row.editable.is-editing .detail-inline-input-wrap { flex: 1 1 170px; width: auto; }
+  .detail-row.editable.is-editing .detail-original-value { grid-column: 1; }
+  .detail-edit-footer { align-items: flex-start; flex-direction: column; }
+  .detail-reset-all { width: 100%; }
 }
 
 @media (max-width: 420px) {
@@ -793,9 +837,10 @@ const state = {
   income: null,
   expense: null,
   errors: [],
-  operatingBudgetOverride: null,
+  operatingIncomeOverrides: {},
+  incomeEditItemIndex: null,
+  operatingDetailsOpen: false,
   generalExpenseOverride: null,
-  budgetEditPanelOpen: false,
   expenseEditPanelOpen: false,
   inputMode: 'file',
   manualOperatingBudget: null,
@@ -820,7 +865,7 @@ app.innerHTML = `
         </span>
       </div>
       <div class="topbar-actions">
-        <span class="version-badge" title="현재 버전">v0.1.17</span>
+        <span class="version-badge" title="현재 버전">v0.1.18</span>
         <button class="ghost-button help-button" id="helpButton" type="button" aria-haspopup="dialog">도움말</button>
         <button class="ghost-button" id="resetButton" type="button">처음부터</button>
       </div>
@@ -975,7 +1020,7 @@ app.innerHTML = `
 
     <footer>
       <span><strong>학돌랩</strong> · 제작 senvip</span>
-      <span>v0.1.17</span>
+      <span>v0.1.18</span>
     </footer>
     <div class="modal-backdrop is-hidden" id="helpModal" role="presentation">
       <section class="help-modal" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
@@ -1004,7 +1049,7 @@ app.innerHTML = `
                 <div><strong>[세입실적] 탭</strong><span>학교운영경비 계산용</span></div>
                 <div><strong>[성질별 세출실적] 탭</strong><span>일반업무추진비 계산용</span></div>
               </div>
-              <p>파일 안의 항목을 읽어 자동 판별합니다. 교부액 변경이나 추경 검토 등으로 실제 편성 예정액이 달라졌다면 결과 화면의 <strong>수정하기</strong>에서 최종 금액을 입력해 다시 계산할 수 있습니다.</p>
+              <p>파일 안의 항목을 읽어 자동 판별합니다. 학교운영경비는 산출내역의 8개 항목을 각각 보정할 수 있고, 일반업무추진비도 결과 화면의 <strong>수정하기</strong>에서 계산에 사용할 금액을 바꿀 수 있습니다.</p>
               <figure class="help-figure">
                 <img src="./assets/edufine-download-guide.png" alt="에듀파인 집행실적 화면에서 성질별 세출실적 탭과 엑셀저장 위치를 표시한 예시 화면" />
                 <figcaption>집행실적 화면에서 해당 탭을 선택한 뒤 오른쪽의 <strong>엑셀저장</strong>을 사용하세요.</figcaption>
@@ -1037,7 +1082,7 @@ app.innerHTML = `
           </section>
         </div>
         <div class="help-modal-foot">
-          <span>업추비 3% · v0.1.17</span>
+          <span>업추비 3% · v0.1.18</span>
           <button class="primary-button" id="helpConfirmButton" type="button">확인</button>
         </div>
       </section>
@@ -1187,9 +1232,20 @@ function renderResults() {
   const baseGeneralExpense = isManualMode
     ? Math.round(state.manualGeneralExpense)
     : Math.round(state.expense.data.amount);
+  const effectiveIncomeItems = isManualMode
+    ? []
+    : state.income.data.items.map((item) => {
+        const hasOverride = Object.prototype.hasOwnProperty.call(state.operatingIncomeOverrides, item.name);
+        return {
+          ...item,
+          originalAmount: Math.round(item.amount),
+          amount: hasOverride ? Math.round(state.operatingIncomeOverrides[item.name]) : Math.round(item.amount),
+          isEdited: hasOverride,
+        };
+      });
   const effectiveOperatingBudget = isManualMode
     ? baseOperatingBudget
-    : (state.operatingBudgetOverride ?? baseOperatingBudget);
+    : effectiveIncomeItems.reduce((sum, item) => sum + item.amount, 0);
   const effectiveGeneralExpense = isManualMode
     ? baseGeneralExpense
     : (state.generalExpenseOverride ?? baseGeneralExpense);
@@ -1211,7 +1267,8 @@ function renderResults() {
   const diffLabel = result.isCompliant
     ? `${formatWon(result.difference)} 여유`
     : `기준보다 ${formatWon(result.difference)} 초과`;
-  const isBudgetEdited = !isManualMode && state.operatingBudgetOverride !== null;
+  const editedIncomeCount = isManualMode ? 0 : effectiveIncomeItems.filter((item) => item.isEdited).length;
+  const isBudgetEdited = editedIncomeCount > 0;
   const isExpenseEdited = !isManualMode && state.generalExpenseOverride !== null;
 
   resultSection.innerHTML = `
@@ -1241,12 +1298,12 @@ function renderResults() {
       <div class="metric">
         <div class="metric-label-row">
           <span>학교운영경비</span>
-          ${isManualMode ? '' : `<button class="metric-edit-button" id="budgetEditButton" type="button" aria-expanded="${state.budgetEditPanelOpen}">수정하기</button>`}
+          ${isManualMode ? '' : `<button class="metric-edit-button" id="budgetEditButton" type="button">항목 수정</button>`}
         </div>
         <strong>${formatWon(result.operatingBudget)}</strong>
         <small>${formatKoreanMoney(result.operatingBudget)}</small>
         ${isBudgetEdited ? `
-          <div class="metric-edited-summary">파일 기준 ${formatWon(baseOperatingBudget)} · <strong>직접 수정됨</strong></div>
+          <div class="metric-edited-summary">파일 기준 ${formatWon(baseOperatingBudget)} · <strong>${editedIncomeCount}개 항목 수정됨</strong></div>
         ` : ''}
       </div>
       <div class="metric featured">
@@ -1266,31 +1323,6 @@ function renderResults() {
         ` : ''}
       </div>
     </article>
-
-    ${isManualMode ? '' : `<div class="budget-edit-panel ${state.budgetEditPanelOpen ? '' : 'is-hidden'}" id="budgetEditPanel">
-      <div class="budget-edit-head">
-        <div>
-          <strong>학교운영경비 수정</strong>
-          <p>교부액 변경 등으로 실제 편성 예정액이 파일과 다르면, 수정된 최종 학교운영경비를 직접 입력해 다시 계산합니다.</p>
-        </div>
-        <button class="budget-edit-close" id="budgetEditClose" type="button" aria-label="학교운영경비 수정 닫기">×</button>
-      </div>
-      <div class="budget-edit-form">
-        <label class="edit-budget-label">
-          <span>수정 금액</span>
-          <span class="edit-budget-input-wrap">
-            <input id="budgetOverrideInput" type="text" inputmode="numeric" autocomplete="off" value="${result.operatingBudget.toLocaleString('ko-KR')}" aria-label="수정된 학교운영경비" />
-            <span>원</span>
-          </span>
-        </label>
-        <button class="edit-budget-apply" id="applyBudgetOverride" type="button">반영</button>
-        <button class="edit-budget-reset" id="resetBudgetOverride" type="button" ${isBudgetEdited ? '' : 'disabled'}>파일 금액으로</button>
-      </div>
-      <div class="edit-budget-preview">
-        파일 기준 <strong>${formatWon(baseOperatingBudget)}</strong>${isBudgetEdited ? ` → 현재 적용 <strong>${formatWon(result.operatingBudget)}</strong>` : ' · 현재 파일 금액을 그대로 사용 중'}
-      </div>
-      <p class="budget-edit-error" id="budgetEditError" aria-live="polite"></p>
-    </div>`}
 
     ${isManualMode ? '' : `<div class="budget-edit-panel ${state.expenseEditPanelOpen ? '' : 'is-hidden'}" id="expenseEditPanel">
       <div class="budget-edit-head">
@@ -1323,9 +1355,9 @@ function renderResults() {
     </div>
 
     <div class="details-stack">
-      <details>
+      <details id="operatingBudgetDetails" ${state.operatingDetailsOpen ? 'open' : ''}>
         <summary>
-          <span><strong>학교운영경비 산출내역</strong><small>${isManualMode ? `직접 입력 ${formatWon(baseOperatingBudget)}` : `8개 원가통계비목 합계 ${formatWon(baseOperatingBudget)}${isBudgetEdited ? ` · 수정 후 ${formatWon(result.operatingBudget)}` : ''}`}</small></span>
+          <span><strong>학교운영경비 산출내역</strong><small>${isManualMode ? `직접 입력 ${formatWon(baseOperatingBudget)}` : `8개 원가통계비목 합계 ${formatWon(result.operatingBudget)}${isBudgetEdited ? ` · ${editedIncomeCount}개 수정됨` : ''}`}</small></span>
           <span class="summary-action">펼치기</span>
         </summary>
         <div class="detail-body">
@@ -1333,17 +1365,35 @@ function renderResults() {
             ${isManualMode ? `
               <div class="detail-row total"><span>직접 입력한 학교운영경비</span><strong>${formatWon(baseOperatingBudget)}</strong></div>
             ` : `
-              ${state.income.data.items.map((item) => `
-                <div class="detail-row">
-                  <span>${escapeHtml(item.name)}</span>
-                  <strong>${formatWon(item.amount)}</strong>
-                </div>
-              `).join('')}
-              <div class="detail-row total"><span>파일 기준 학교운영경비</span><strong>${formatWon(baseOperatingBudget)}</strong></div>
-              ${isBudgetEdited ? `<div class="detail-row total"><span>직접 수정한 학교운영경비</span><strong>${formatWon(result.operatingBudget)}</strong></div>` : ''}
+              ${effectiveIncomeItems.map((item, index) => {
+                const isEditing = state.incomeEditItemIndex === index;
+                return `
+                <div class="detail-row editable ${item.isEdited ? 'is-edited' : ''} ${isEditing ? 'is-editing' : ''}">
+                  <span class="detail-item-name">${escapeHtml(item.name)}${item.isEdited ? '<small class="detail-edited-badge">수정됨</small>' : ''}</span>
+                  <div class="detail-value-actions">
+                    ${isEditing ? `
+                      <span class="detail-inline-edit">
+                        <span class="detail-inline-input-wrap">
+                          <input id="incomeItemEditInput" type="text" inputmode="numeric" autocomplete="off" value="${item.amount.toLocaleString('ko-KR')}" aria-label="${escapeHtml(item.name)} 수정 금액" />
+                          <span>원</span>
+                        </span>
+                        <button class="detail-apply-button" id="applyIncomeItemEdit" type="button">반영</button>
+                        <button class="detail-cancel-button" id="cancelIncomeItemEdit" type="button">취소</button>
+                      </span>
+                    ` : `
+                      <strong>${formatWon(item.amount)}</strong>
+                      <button class="detail-edit-button" type="button" data-income-edit-index="${index}">수정</button>
+                    `}
+                  </div>
+                  ${item.isEdited ? `<small class="detail-original-value">파일 값 ${formatWon(item.originalAmount)}</small>` : ''}
+                </div>`;
+              }).join('')}
+              <div class="detail-row total"><span>학교운영경비 합계</span><strong>${formatWon(result.operatingBudget)}</strong></div>
+              ${isBudgetEdited ? `<div class="detail-edit-footer"><span>파일 기준 합계 ${formatWon(baseOperatingBudget)}</span><button class="detail-reset-all" id="resetIncomeOverrides" type="button">파일 값으로 되돌리기</button></div>` : ''}
             `}
           </div>
-          <p class="detail-note">${isManualMode ? '직접 입력한 금액은 원본 자료를 대체하지 않는 계산용 값입니다.' : `전체 세입예산이 아니라, 위 8개 원가통계비목의 <strong>예산액</strong>만 합산합니다.${isBudgetEdited ? ' 직접 입력한 수정 금액은 원본 파일을 바꾸지 않고 이번 계산에만 적용합니다.' : ''}`}</p>
+          <p class="detail-note">${isManualMode ? '직접 입력한 금액은 원본 자료를 대체하지 않는 계산용 값입니다.' : `전체 세입예산이 아니라, 위 8개 원가통계비목의 <strong>예산액</strong>만 합산합니다. 각 항목의 금액은 이번 계산에 사용할 값만 보정할 수 있으며 원본 파일은 변경하지 않습니다.`}</p>
+          ${!isManualMode && state.incomeEditItemIndex !== null ? '<p class="budget-edit-error" id="incomeItemEditError" aria-live="polite"></p>' : ''}
         </div>
       </details>
 
@@ -1388,17 +1438,20 @@ function parseBudgetInput(value) {
 }
 
 function formatBudgetInput(value) {
-  const amount = parseBudgetInput(value);
-  return amount ? amount.toLocaleString('ko-KR') : '';
+  const digits = String(value || '').replace(/[^0-9]/g, '');
+  if (!digits) return '';
+  return Number(digits).toLocaleString('ko-KR');
 }
 
 function wireBudgetEditControls() {
   const budgetOpenButton = document.querySelector('#budgetEditButton');
-  const budgetCloseButton = document.querySelector('#budgetEditClose');
-  const budgetInput = document.querySelector('#budgetOverrideInput');
-  const budgetApplyButton = document.querySelector('#applyBudgetOverride');
-  const budgetResetButton = document.querySelector('#resetBudgetOverride');
-  const budgetErrorEl = document.querySelector('#budgetEditError');
+  const operatingDetails = document.querySelector('#operatingBudgetDetails');
+  const incomeEditButtons = document.querySelectorAll('[data-income-edit-index]');
+  const incomeEditInput = document.querySelector('#incomeItemEditInput');
+  const incomeApplyButton = document.querySelector('#applyIncomeItemEdit');
+  const incomeCancelButton = document.querySelector('#cancelIncomeItemEdit');
+  const incomeResetAllButton = document.querySelector('#resetIncomeOverrides');
+  const incomeErrorEl = document.querySelector('#incomeItemEditError');
 
   const expenseOpenButton = document.querySelector('#expenseEditButton');
   const expenseCloseButton = document.querySelector('#expenseEditClose');
@@ -1416,48 +1469,95 @@ function wireBudgetEditControls() {
     });
   };
 
+  operatingDetails?.addEventListener('toggle', () => {
+    state.operatingDetailsOpen = operatingDetails.open;
+  });
+
   budgetOpenButton?.addEventListener('click', () => {
-    state.budgetEditPanelOpen = !state.budgetEditPanelOpen;
+    state.operatingDetailsOpen = true;
+    state.incomeEditItemIndex = null;
     state.expenseEditPanelOpen = false;
     renderResults();
-    if (state.budgetEditPanelOpen) {
+    requestAnimationFrame(() => {
+      document.querySelector('#operatingBudgetDetails')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  });
+
+  incomeEditButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const index = Number(button.dataset.incomeEditIndex);
+      if (!Number.isInteger(index) || !state.income?.data?.items?.[index]) return;
+      state.operatingDetailsOpen = true;
+      state.incomeEditItemIndex = index;
+      state.expenseEditPanelOpen = false;
+      renderResults();
       requestAnimationFrame(() => {
-        const nextInput = document.querySelector('#budgetOverrideInput');
+        const nextInput = document.querySelector('#incomeItemEditInput');
         nextInput?.focus();
         nextInput?.select();
+        nextInput?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       });
-    }
+    });
   });
 
-  budgetCloseButton?.addEventListener('click', () => {
-    state.budgetEditPanelOpen = false;
-    renderResults();
+  wireFormattedInput(incomeEditInput, incomeErrorEl);
+  incomeEditInput?.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') incomeApplyButton?.click();
+    if (event.key === 'Escape') incomeCancelButton?.click();
   });
 
-  wireFormattedInput(budgetInput, budgetErrorEl);
-  budgetInput?.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter') budgetApplyButton?.click();
-  });
-  budgetApplyButton?.addEventListener('click', () => {
-    const amount = parseBudgetInput(budgetInput?.value);
-    if (!Number.isFinite(amount) || amount <= 0) {
-      if (budgetErrorEl) budgetErrorEl.textContent = '수정된 학교운영경비 금액을 입력해 주세요.';
-      budgetInput?.focus();
+  incomeApplyButton?.addEventListener('click', () => {
+    const index = state.incomeEditItemIndex;
+    const item = Number.isInteger(index) ? state.income?.data?.items?.[index] : null;
+    const hasAmountInput = /[0-9]/.test(incomeEditInput?.value || '');
+    const amount = parseBudgetInput(incomeEditInput?.value);
+
+    if (!item || !hasAmountInput || !Number.isFinite(amount) || amount < 0) {
+      if (incomeErrorEl) incomeErrorEl.textContent = '0원 이상 금액을 입력해 주세요.';
+      incomeEditInput?.focus();
       return;
     }
-    state.operatingBudgetOverride = Math.round(amount);
-    state.budgetEditPanelOpen = true;
+
+    const nextOverrides = { ...state.operatingIncomeOverrides };
+    if (Math.round(amount) === Math.round(item.amount)) {
+      delete nextOverrides[item.name];
+    } else {
+      nextOverrides[item.name] = Math.round(amount);
+    }
+
+    const nextTotal = state.income.data.items.reduce((sum, sourceItem) => {
+      const hasOverride = Object.prototype.hasOwnProperty.call(nextOverrides, sourceItem.name);
+      return sum + (hasOverride ? nextOverrides[sourceItem.name] : Math.round(sourceItem.amount));
+    }, 0);
+
+    if (nextTotal <= 0) {
+      if (incomeErrorEl) incomeErrorEl.textContent = '학교운영경비 합계는 0원보다 커야 합니다.';
+      incomeEditInput?.focus();
+      return;
+    }
+
+    state.operatingIncomeOverrides = nextOverrides;
+    state.incomeEditItemIndex = null;
+    state.operatingDetailsOpen = true;
     renderResults();
   });
-  budgetResetButton?.addEventListener('click', () => {
-    state.operatingBudgetOverride = null;
-    state.budgetEditPanelOpen = true;
+
+  incomeCancelButton?.addEventListener('click', () => {
+    state.incomeEditItemIndex = null;
+    state.operatingDetailsOpen = true;
+    renderResults();
+  });
+
+  incomeResetAllButton?.addEventListener('click', () => {
+    state.operatingIncomeOverrides = {};
+    state.incomeEditItemIndex = null;
+    state.operatingDetailsOpen = true;
     renderResults();
   });
 
   expenseOpenButton?.addEventListener('click', () => {
     state.expenseEditPanelOpen = !state.expenseEditPanelOpen;
-    state.budgetEditPanelOpen = false;
+    state.incomeEditItemIndex = null;
     renderResults();
     if (state.expenseEditPanelOpen) {
       requestAnimationFrame(() => {
@@ -1513,8 +1613,9 @@ async function handleFile(file, intendedSlot) {
     const parsed = await parseFile(file);
     state[parsed.type] = parsed;
     if (parsed.type === 'income') {
-      state.operatingBudgetOverride = null;
-      state.budgetEditPanelOpen = false;
+      state.operatingIncomeOverrides = {};
+      state.incomeEditItemIndex = null;
+      state.operatingDetailsOpen = false;
     }
     if (parsed.type === 'expense') {
       state.generalExpenseOverride = null;
@@ -1590,7 +1691,7 @@ function syncInputModeUI() {
 
 function setInputMode(mode) {
   state.inputMode = mode;
-  state.budgetEditPanelOpen = false;
+  state.incomeEditItemIndex = null;
   state.expenseEditPanelOpen = false;
   syncInputModeUI();
   clearMessage();
@@ -1658,9 +1759,10 @@ syncInputModeUI();
 document.querySelector('#resetButton').addEventListener('click', () => {
   state.income = null;
   state.expense = null;
-  state.operatingBudgetOverride = null;
+  state.operatingIncomeOverrides = {};
+  state.incomeEditItemIndex = null;
+  state.operatingDetailsOpen = false;
   state.generalExpenseOverride = null;
-  state.budgetEditPanelOpen = false;
   state.expenseEditPanelOpen = false;
   state.inputMode = 'file';
   state.manualOperatingBudget = null;
