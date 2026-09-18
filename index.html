@@ -64,9 +64,15 @@ main { padding-top: 56px; }
 .breadcrumb { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; margin-top: 10px; color: #667085; font-size: 14px; line-height: 1.7; }
 .breadcrumb b { color: #98a2b3; font-weight: 700; }
 .breadcrumb strong { color: var(--primary-dark); font-weight: 800; }
-.download-tabs { display: flex; gap: 10px 24px; flex-wrap: wrap; margin-top: 13px; }
-.download-tabs > div { display: inline-flex; align-items: center; gap: 8px; color: #667085; font-size: 13px; }
-.tab-chip { padding: 5px 9px; border: 1px solid #dbe2e8; border-radius: 8px; background: white; color: var(--primary-dark); font-weight: 800; }
+.download-methods { display: grid; gap: 8px; margin-top: 14px; }
+.download-method { display: grid; grid-template-columns: 74px minmax(0, 1fr); gap: 12px; align-items: start; padding: 11px 12px; border: 1px solid #e3e8ee; border-radius: 12px; background: rgba(255,255,255,.78); }
+.download-method-label { min-height: 28px; display: inline-grid; place-items: center; align-self: start; padding: 0 9px; border-radius: 8px; background: #eef2ff; color: var(--primary-dark); font-size: 13px; font-weight: 900; white-space: nowrap; }
+.download-method-detail { min-width: 0; }
+.download-method-path { display: block; color: #667085; font-size: 13px; font-weight: 700; line-height: 1.55; }
+.download-file-list { display: flex; flex-wrap: wrap; gap: 7px 14px; margin-top: 5px; }
+.download-file { display: inline-flex; align-items: center; gap: 6px; color: #475467; font-size: 14px; line-height: 1.55; }
+.download-file strong { color: var(--primary-dark); font-weight: 900; }
+.file-role { display: inline-flex; align-items: center; min-height: 22px; padding: 0 7px; border: 1px solid #d9e1fb; border-radius: 999px; background: #f8faff; color: #4e5f8d; font-size: 11px; font-weight: 800; white-space: nowrap; }
 
 
 .input-mode-tabs {
@@ -404,7 +410,7 @@ body.modal-open { overflow: hidden; }
 footer strong { color: #667085; font-weight: 800; }
 
 /* 가독성 강화: 작은 보조문구도 13px 이상으로 유지하고 대비를 높입니다. */
-.ghost-button, .hero-kicker, .download-tabs > div, .section-heading p, .notice, .result-topline { font-size: 14px; }
+.ghost-button, .hero-kicker, .download-file, .section-heading p, .notice, .result-topline { font-size: 14px; }
 .path-heading-row h2 { font-size: 19px; }
 .path-badge, .section-step, .upload-number, .verdict, .rounding-warning, .metric span, .formula-card strong,
 .detail-row, .rule-line, .criteria-toggle strong, .criteria-body h3, .help-section p, .help-path,
@@ -540,7 +546,9 @@ footer { color: #667085; font-size: 13px; }
   .path-card { grid-template-columns: 38px 1fr; padding: 17px 16px; border-radius: 15px; }
   .path-icon { width: 38px; height: 38px; border-radius: 11px; }
   .breadcrumb { gap: 5px; font-size: 14px; }
-  .download-tabs { display: grid; gap: 7px; }
+  .download-method { grid-template-columns: 1fr; gap: 8px; }
+  .download-method-label { width: fit-content; }
+  .download-file-list { display: grid; gap: 5px; }
   .download-help-link { margin-left: 0; flex-basis: 100%; width: fit-content; padding-left: 0; }
   .section-heading { align-items: flex-start; flex-direction: column; gap: 8px; }
   .section-heading p { text-align: left; }
@@ -934,7 +942,7 @@ app.innerHTML = `
         </span>
       </div>
       <div class="topbar-actions">
-        <span class="version-badge" title="현재 버전">v0.1.20</span>
+        <span class="version-badge" title="현재 버전">v0.1.21</span>
         <button class="ghost-button help-button" id="helpButton" type="button" aria-haspopup="dialog">도움말</button>
         <button class="ghost-button" id="resetButton" type="button">처음부터</button>
       </div>
@@ -955,15 +963,33 @@ app.innerHTML = `
         <div class="path-content">
           <div class="path-heading-row">
             <h2 id="downloadPathTitle">파일은 여기서 내려받아요</h2>
-            <span class="path-badge">에듀파인</span>
+            <span class="path-badge">K-에듀파인</span>
             <button class="download-help-link" id="downloadHelpButton" type="button" aria-label="파일 내려받기 도움말 보기">파일 내려받는 방법</button>
           </div>
-          <div class="breadcrumb" aria-label="다운로드 경로">
-            <span>학교회계</span><b>›</b><span>예산결산</span><b>›</b><span>결산현황</span><b>›</b><span>집행실적</span><b>›</b><strong>엑셀저장(마감)</strong>
+          <div class="breadcrumb" aria-label="공통 다운로드 경로">
+            <span>학교회계</span><b>›</b><span>예산결산</span><b>›</b><strong>결산현황</strong>
           </div>
-          <div class="download-tabs">
-            <div><span class="tab-chip">[세입실적] 탭</span><span>세입 파일</span></div>
-            <div><span class="tab-chip">[성질별 세출실적] 탭</span><span>세출 파일</span></div>
+          <div class="download-methods" role="list" aria-label="지원하는 파일 내려받기 방식">
+            <div class="download-method" role="listitem">
+              <span class="download-method-label">실시간</span>
+              <div class="download-method-detail">
+                <span class="download-method-path">집행실적 엑셀저장(실시간)</span>
+                <div class="download-file-list">
+                  <span class="download-file"><strong>201</strong> 목/원가목별 세입실적 <span class="file-role">세입</span></span>
+                  <span class="download-file"><strong>104</strong> 성질별 세출실적 <span class="file-role">세출</span></span>
+                </div>
+              </div>
+            </div>
+            <div class="download-method" role="listitem">
+              <span class="download-method-label">마감</span>
+              <div class="download-method-detail">
+                <span class="download-method-path">집행실적 › 엑셀저장(마감)</span>
+                <div class="download-file-list">
+                  <span class="download-file"><strong>[세입실적]</strong> 탭 <span class="file-role">세입</span></span>
+                  <span class="download-file"><strong>[성질별 세출실적]</strong> 탭 <span class="file-role">세출</span></span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -1089,7 +1115,7 @@ app.innerHTML = `
 
     <footer>
       <span><strong>학돌랩</strong> · 제작 senvip</span>
-      <span>v0.1.20</span>
+      <span>v0.1.21</span>
     </footer>
     <div class="modal-backdrop is-hidden" id="helpModal" role="presentation">
       <section class="help-modal" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
@@ -1171,7 +1197,7 @@ app.innerHTML = `
           </section>
         </div>
         <div class="help-modal-foot">
-          <span>업추비 3% · v0.1.20</span>
+          <span>업추비 3% · v0.1.21</span>
           <button class="primary-button" id="helpConfirmButton" type="button">확인</button>
         </div>
       </section>
