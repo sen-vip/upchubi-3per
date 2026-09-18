@@ -420,7 +420,7 @@ footer { color: #667085; font-size: 13px; }
 
 
 
-/* 학교운영경비 항목별 보정·일반업무추진비 직접 수정 — v0.1.18 */
+/* 학교운영경비 항목별 보정·일반업무추진비 직접 수정 — v0.1.19 */
 .metric-label-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .metric-label-row > span { margin: 0; }
 .metric-edit-button {
@@ -485,7 +485,7 @@ footer { color: #667085; font-size: 13px; }
 .budget-edit-error { min-height: 18px; margin: 7px 0 0; color: #a1433d; font-size: 11.5px; line-height: 1.5; }
 
 
-/* 학교운영경비 산출내역 항목별 계산값 보정 — v0.1.18 */
+/* 학교운영경비 산출내역 항목별 계산값 보정 — v0.1.19 */
 .detail-row.editable { position: relative; min-height: 48px; padding: 5px 0; }
 .detail-row.editable.is-edited { margin-inline: -10px; padding-inline: 10px; border-radius: 9px; background: #f8faff; }
 .detail-item-name { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; min-width: 0; }
@@ -590,18 +590,19 @@ footer { color: #667085; font-size: 13px; }
 <body>
   <div id="app"></div>
   <script>
-const OPERATING_INCOME_ITEMS = [
-  '학교운영비전입금',
-  '사용료',
-  '수수료',
-  '자산매각대',
-  '지난년도수입',
-  '이자수입',
-  '기타행정활동수입',
-  '순세계잉여금',
-];
-
+const OPERATING_INCOME_CODES = new Map([
+  ['A310101', '학교운영비전입금'],
+  ['B310101', '사용료'],
+  ['B310102', '수수료'],
+  ['B320101', '자산매각대'],
+  ['B350101', '지난년도수입'],
+  ['B350201', '이자수입'],
+  ['B350301', '기타행정활동수입'],
+  ['C110101', '순세계잉여금'],
+]);
+const OPERATING_INCOME_ITEMS = [...OPERATING_INCOME_CODES.values()];
 const GENERAL_EXPENSE_CODE = 'B200101';
+const GENERAL_EXPENSE_NAME = '일반업무추진비';
 
 function normalizeText(value) {
   return String(value ?? '')
@@ -609,6 +610,10 @@ function normalizeText(value) {
     .replace(/\s+/g, '')
     .replace(/[·ㆍ]/g, '·')
     .trim();
+}
+
+function normalizeCode(value) {
+  return normalizeText(value).toUpperCase();
 }
 
 function toWon(value) {
@@ -669,7 +674,6 @@ function calculateStatus(operatingBudget, generalExpense) {
     throw new Error('일반업무추진비가 올바른 숫자가 아닙니다.');
   }
 
-  // 업로드된 예산액을 기준으로 3% 산출액을 정수 금액으로 계산합니다.
   const maxAllowed = Math.floor((denominator * 3) / 100);
   const isCompliant = numerator <= maxAllowed;
   const difference = isCompliant ? maxAllowed - numerator : numerator - maxAllowed;
@@ -683,14 +687,6 @@ function calculateStatus(operatingBudget, generalExpense) {
     difference,
     ratio,
   };
-}
-
-
-function findHeaderRow(rows, requiredHeaders) {
-  return rows.findIndex((row) => {
-    const normalized = (row || []).map(normalizeText);
-    return requiredHeaders.every((header) => normalized.includes(normalizeText(header)));
-  });
 }
 
 function headerMap(row) {
@@ -710,28 +706,80 @@ function getIndex(map, aliases) {
   return -1;
 }
 
-function classifyRows(rows) {
-  const incomeHeader = findHeaderRow(rows, ['원가통계비목', '예산액']);
-  const expenseHeader = findHeaderRow(rows, ['세출목', '원가통계비목명', '예산액']);
-
-  if (expenseHeader >= 0) return { type: 'expense', headerRow: expenseHeader };
-  if (incomeHeader >= 0) return { type: 'income', headerRow: incomeHeader };
-  return { type: 'unknown', headerRow: -1 };
+function getIndexStartingWith(map, prefixes) {
+  for (const [key, index] of map.entries()) {
+    if (prefixes.some((prefix) => key.startsWith(normalizeText(prefix)))) return index;
+  }
+  return -1;
 }
 
-function extractIncome(rows) {
-  const headerRow = findHeaderRow(rows, ['원가통계비목', '예산액']);
+function getBudgetIndex(map) {
+  const exact = getIndex(map, ['예산액']);
+  if (exact >= 0) return exact;
+  return getIndexStartingWith(map, ['예산액(']);
+}
+
+function findDataHeaderRow(rows) {
+  const scanLimit = Math.min(rows.length, 40);
+  for (let i = 0; i < scanLimit; i += 1) {
+    const map = headerMap(rows[i]);
+    const codeIndex = getIndex(map, ['원가통계비목코드', '원가통계비목 코드']);
+    const nameIndex = getIndex(map, ['원가통계비목명', '원가통계비목']);
+    const budgetIndex = getBudgetIndex(map);
+    if (nameIndex >= 0 && budgetIndex >= 0 && (codeIndex >= 0 || map.has(normalizeText('세출목')))) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+function classifyRows(rows) {
+  const headerRow = findDataHeaderRow(rows);
+  if (headerRow < 0) return { type: 'unknown', headerRow: -1 };
+
+  const map = headerMap(rows[headerRow]);
+  const hasIncomeStructure =
+    getIndex(map, ['장코드']) >= 0 &&
+    getIndex(map, ['관코드']) >= 0 &&
+    getIndex(map, ['항코드']) >= 0;
+  const hasExpenseStructure =
+    getIndex(map, ['세출목']) >= 0 ||
+    getIndex(map, ['세출세목명', '세목명']) >= 0 ||
+    getIndex(map, ['세목코드']) >= 0;
+
+  if (hasIncomeStructure && !hasExpenseStructure) return { type: 'income', headerRow };
+  if (hasExpenseStructure && !hasIncomeStructure) return { type: 'expense', headerRow };
+
+  const codeIndex = getIndex(map, ['원가통계비목코드', '원가통계비목 코드']);
+  const codes = new Set();
+  if (codeIndex >= 0) {
+    for (let i = headerRow + 1; i < rows.length; i += 1) {
+      const code = normalizeCode((rows[i] || [])[codeIndex]);
+      if (code) codes.add(code);
+    }
+  }
+
+  if (codes.has(GENERAL_EXPENSE_CODE)) return { type: 'expense', headerRow };
+  if ([...OPERATING_INCOME_CODES.keys()].some((code) => codes.has(code))) {
+    return { type: 'income', headerRow };
+  }
+
+  return { type: 'unknown', headerRow };
+}
+
+function extractIncome(rows, preferredHeaderRow = -1) {
+  const headerRow = preferredHeaderRow >= 0 ? preferredHeaderRow : findDataHeaderRow(rows);
   if (headerRow < 0) {
-    throw new Error('세입실적 파일에서 원가통계비목과 예산액 열을 찾지 못했습니다.');
+    throw new Error('세입 파일에서 원가통계비목과 예산액 열을 찾지 못했습니다.');
   }
 
   const map = headerMap(rows[headerRow]);
-  const nameIndex = getIndex(map, ['원가통계비목', '원가통계비목명']);
+  const nameIndex = getIndex(map, ['원가통계비목명', '원가통계비목']);
   const codeIndex = getIndex(map, ['원가통계비목코드', '원가통계비목 코드']);
-  const budgetIndex = getIndex(map, ['예산액']);
+  const budgetIndex = getBudgetIndex(map);
 
   if (nameIndex < 0 || budgetIndex < 0) {
-    throw new Error('세입실적 파일의 필요한 열을 찾지 못했습니다.');
+    throw new Error('세입 파일의 필요한 열을 찾지 못했습니다.');
   }
 
   const targets = new Map(OPERATING_INCOME_ITEMS.map((name) => [name, 0]));
@@ -739,18 +787,29 @@ function extractIncome(rows) {
 
   for (let i = headerRow + 1; i < rows.length; i += 1) {
     const row = rows[i] || [];
+    const code = codeIndex >= 0 ? normalizeCode(row[codeIndex]) : '';
     const name = normalizeText(row[nameIndex]);
-    if (!name || name === '합계') continue;
-    if (!targets.has(name)) continue;
+    let targetName = '';
+
+    if (code && OPERATING_INCOME_CODES.has(code)) {
+      targetName = OPERATING_INCOME_CODES.get(code);
+      if (name && name !== normalizeText(targetName)) {
+        throw new Error(`${code} 코드의 항목명이 예상과 다릅니다. 파일 내용을 확인해주세요.`);
+      }
+    } else if (codeIndex < 0 && targets.has(name)) {
+      targetName = name;
+    } else {
+      continue;
+    }
 
     const amount = toWon(row[budgetIndex]);
-    targets.set(name, targets.get(name) + amount);
-    matched.set(name, matched.get(name) + 1);
+    targets.set(targetName, targets.get(targetName) + amount);
+    matched.set(targetName, matched.get(targetName) + 1);
   }
 
   const total = [...targets.values()].reduce((sum, value) => sum + value, 0);
   if (total <= 0) {
-    throw new Error('세입실적 파일에서 학교운영경비 항목을 찾지 못했거나 합계가 0원입니다.');
+    throw new Error('세입 파일에서 학교운영경비 항목을 찾지 못했거나 합계가 0원입니다.');
   }
 
   return {
@@ -769,21 +828,21 @@ function extractIncome(rows) {
   };
 }
 
-function extractExpense(rows) {
-  const headerRow = findHeaderRow(rows, ['세출목', '원가통계비목명', '예산액']);
+function extractExpense(rows, preferredHeaderRow = -1) {
+  const headerRow = preferredHeaderRow >= 0 ? preferredHeaderRow : findDataHeaderRow(rows);
   if (headerRow < 0) {
-    throw new Error('성질별 세출실적 파일에서 필요한 열을 찾지 못했습니다.');
+    throw new Error('세출 파일에서 필요한 열을 찾지 못했습니다.');
   }
 
   const map = headerMap(rows[headerRow]);
-  const seMokIndex = getIndex(map, ['세출목']);
-  const detailIndex = getIndex(map, ['세출세목명']);
+  const seMokIndex = getIndex(map, ['세출목', '목명']);
+  const detailIndex = getIndex(map, ['세출세목명', '세목명']);
   const nameIndex = getIndex(map, ['원가통계비목명', '원가통계비목']);
   const codeIndex = getIndex(map, ['원가통계비목코드', '원가통계비목 코드']);
-  const budgetIndex = getIndex(map, ['예산액']);
+  const budgetIndex = getBudgetIndex(map);
 
   if (nameIndex < 0 || budgetIndex < 0) {
-    throw new Error('성질별 세출실적 파일의 원가통계비목명 또는 예산액 열을 찾지 못했습니다.');
+    throw new Error('세출 파일의 원가통계비목명 또는 예산액 열을 찾지 못했습니다.');
   }
 
   let amount = 0;
@@ -792,17 +851,21 @@ function extractExpense(rows) {
 
   for (let i = headerRow + 1; i < rows.length; i += 1) {
     const row = rows[i] || [];
-    const code = codeIndex >= 0 ? normalizeText(row[codeIndex]).toUpperCase() : '';
+    const code = codeIndex >= 0 ? normalizeCode(row[codeIndex]) : '';
     const name = normalizeText(row[nameIndex]);
     const seMok = seMokIndex >= 0 ? normalizeText(row[seMokIndex]) : '';
     const detail = detailIndex >= 0 ? normalizeText(row[detailIndex]) : '';
 
     const codeMatch = code === GENERAL_EXPENSE_CODE;
+    if (codeMatch && name && name !== normalizeText(GENERAL_EXPENSE_NAME)) {
+      throw new Error(`${GENERAL_EXPENSE_CODE} 코드의 항목명이 예상과 다릅니다. 파일 내용을 확인해주세요.`);
+    }
+
     const nameFallback =
-      !code &&
+      codeIndex < 0 &&
       seMok === '업무추진비' &&
-      detail === '일반업무추진비' &&
-      name === '일반업무추진비';
+      detail === GENERAL_EXPENSE_NAME &&
+      name === GENERAL_EXPENSE_NAME;
 
     if (!codeMatch && !nameFallback) continue;
 
@@ -812,7 +875,7 @@ function extractExpense(rows) {
   }
 
   if (matchedRows === 0) {
-    throw new Error('성질별 세출실적 파일에서 일반업무추진비(B200101)를 찾지 못했습니다.');
+    throw new Error('세출 파일에서 일반업무추진비(B200101)를 찾지 못했습니다.');
   }
 
   return {
@@ -865,7 +928,7 @@ app.innerHTML = `
         </span>
       </div>
       <div class="topbar-actions">
-        <span class="version-badge" title="현재 버전">v0.1.18</span>
+        <span class="version-badge" title="현재 버전">v0.1.19</span>
         <button class="ghost-button help-button" id="helpButton" type="button" aria-haspopup="dialog">도움말</button>
         <button class="ghost-button" id="resetButton" type="button">처음부터</button>
       </div>
@@ -875,7 +938,7 @@ app.innerHTML = `
       <section class="hero compact-hero">
         <div class="hero-kicker">서울특별시교육청 학교회계 기준</div>
         <h1>업무추진비가 <span>3% 이내</span>인지 확인해요</h1>
-        <p>세입실적과 성질별 세출실적 두 파일을 올리면 자동 계산하고, 파일이 없으면 금액을 직접 입력할 수도 있습니다.</p>
+        <p>세입실적·201과 성질별 세출실적·104 형식을 자동으로 읽어 계산하고, 파일이 없으면 금액을 직접 입력할 수도 있습니다.</p>
         <div class="scope-note"><strong>적용 범위</strong> · 서울특별시교육청 학교회계 예산편성 기준을 확인하는 도구입니다. 다른 시·도교육청은 해당 교육청의 예산편성 지침을 확인해 주세요.</div>
       </section>
 
@@ -920,7 +983,7 @@ app.innerHTML = `
               <div class="upload-number">1</div>
               <div>
                 <h3>세입실적</h3>
-                <p>학교운영경비 계산용</p>
+                <p>세입실적 · 201 형식 지원</p>
               </div>
             </div>
             <div class="drop-zone" data-drop="income" tabindex="0" role="button" aria-label="세입실적 엑셀 파일 선택">
@@ -939,7 +1002,7 @@ app.innerHTML = `
               <div class="upload-number">2</div>
               <div>
                 <h3>성질별 세출실적</h3>
-                <p>일반업무추진비 계산용</p>
+                <p>성질별 세출실적 · 104 형식 지원</p>
               </div>
             </div>
             <div class="drop-zone" data-drop="expense" tabindex="0" role="button" aria-label="성질별 세출실적 엑셀 파일 선택">
@@ -1020,7 +1083,7 @@ app.innerHTML = `
 
     <footer>
       <span><strong>학돌랩</strong> · 제작 senvip</span>
-      <span>v0.1.18</span>
+      <span>v0.1.19</span>
     </footer>
     <div class="modal-backdrop is-hidden" id="helpModal" role="presentation">
       <section class="help-modal" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
@@ -1036,7 +1099,7 @@ app.innerHTML = `
             <span class="help-step">01</span>
             <div>
               <h3>입력 방법을 선택해요</h3>
-              <p><strong>파일 업로드</strong> 또는 <strong>직접 입력</strong> 중 편한 방법을 선택할 수 있습니다. 엑셀 파일이 있다면 세입실적과 성질별 세출실적을 올리고, 파일이 없다면 학교운영경비와 일반업무추진비의 최종 편성 예정액을 직접 입력하세요. 두 방법 모두 같은 3% 기준으로 계산합니다.</p>
+              <p><strong>파일 업로드</strong> 또는 <strong>직접 입력</strong> 중 편한 방법을 선택할 수 있습니다. 엑셀 파일이 있다면 세입실적 또는 201 형식과 성질별 세출실적 또는 104 형식을 올리고, 파일이 없다면 학교운영경비와 일반업무추진비의 최종 편성 예정액을 직접 입력하세요. 두 방법 모두 같은 3% 기준으로 계산합니다.</p>
             </div>
           </section>
 
@@ -1082,7 +1145,7 @@ app.innerHTML = `
           </section>
         </div>
         <div class="help-modal-foot">
-          <span>업추비 3% · v0.1.18</span>
+          <span>업추비 3% · v0.1.19</span>
           <button class="primary-button" id="helpConfirmButton" type="button">확인</button>
         </div>
       </section>
@@ -1102,6 +1165,43 @@ function escapeHtml(value) {
     .replaceAll("'", '&#039;');
 }
 
+function repairWorksheetRange(sheet) {
+  const cellRefs = Object.keys(sheet || {}).filter((key) => /^[A-Z]+\d+$/.test(key));
+  if (!cellRefs.length || !window.XLSX?.utils) return;
+
+  let minRow = Number.POSITIVE_INFINITY;
+  let minCol = Number.POSITIVE_INFINITY;
+  let maxRow = -1;
+  let maxCol = -1;
+
+  cellRefs.forEach((ref) => {
+    const cell = XLSX.utils.decode_cell(ref);
+    minRow = Math.min(minRow, cell.r);
+    minCol = Math.min(minCol, cell.c);
+    maxRow = Math.max(maxRow, cell.r);
+    maxCol = Math.max(maxCol, cell.c);
+  });
+
+  if (maxRow < 0 || maxCol < 0) return;
+  const actualRange = { s: { r: minRow, c: minCol }, e: { r: maxRow, c: maxCol } };
+
+  let shouldRepair = !sheet['!ref'];
+  if (!shouldRepair) {
+    try {
+      const currentRange = XLSX.utils.decode_range(sheet['!ref']);
+      shouldRepair =
+        currentRange.s.r > actualRange.s.r ||
+        currentRange.s.c > actualRange.s.c ||
+        currentRange.e.r < actualRange.e.r ||
+        currentRange.e.c < actualRange.e.c;
+    } catch {
+      shouldRepair = true;
+    }
+  }
+
+  if (shouldRepair) sheet['!ref'] = XLSX.utils.encode_range(actualRange);
+}
+
 function rowsFromWorkbook(workbook) {
   const preferred = workbook.SheetNames.find((name) => /집행실적/.test(name));
   const orderedNames = preferred
@@ -1110,7 +1210,9 @@ function rowsFromWorkbook(workbook) {
 
   let best = null;
   for (const sheetName of orderedNames) {
-    const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {
+    const sheet = workbook.Sheets[sheetName];
+    repairWorksheetRange(sheet);
+    const rows = XLSX.utils.sheet_to_json(sheet, {
       header: 1,
       raw: true,
       defval: null,
@@ -1149,7 +1251,7 @@ async function parseFile(file) {
   const buffer = await file.arrayBuffer();
   let workbook;
   try {
-    workbook = XLSX.read(buffer, { type: 'array', cellDates: false, dense: false });
+    workbook = XLSX.read(buffer, { type: 'array', cellDates: false, dense: false, nodim: true });
   } catch (error) {
     const text = String(error?.message || error);
     if (/password|encrypted|encryption/i.test(text)) {
@@ -1164,7 +1266,7 @@ async function parseFile(file) {
   }
 
   if (parsed.classification.type === 'unknown') {
-    throw new Error('집행실적 세입실적 또는 성질별 세출실적 형식으로 판별하지 못했습니다.');
+    throw new Error('지원하는 세입/세출 집행실적 형식으로 판별하지 못했습니다.');
   }
 
   if (parsed.classification.type === 'income') {
@@ -1172,7 +1274,7 @@ async function parseFile(file) {
       type: 'income',
       file,
       sheetName: parsed.sheetName,
-      data: extractIncome(parsed.rows),
+      data: extractIncome(parsed.rows, parsed.classification.headerRow),
     };
   }
 
@@ -1180,7 +1282,7 @@ async function parseFile(file) {
     type: 'expense',
     file,
     sheetName: parsed.sheetName,
-    data: extractExpense(parsed.rows),
+    data: extractExpense(parsed.rows, parsed.classification.headerRow),
   };
 }
 
