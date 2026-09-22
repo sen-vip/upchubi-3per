@@ -942,7 +942,7 @@ app.innerHTML = `
         </span>
       </div>
       <div class="topbar-actions">
-        <span class="version-badge" title="현재 버전">v0.1.21</span>
+        <span class="version-badge" title="현재 버전">v0.1.22</span>
         <button class="ghost-button help-button" id="helpButton" type="button" aria-haspopup="dialog">도움말</button>
         <button class="ghost-button" id="resetButton" type="button">처음부터</button>
       </div>
@@ -1115,7 +1115,7 @@ app.innerHTML = `
 
     <footer>
       <span><strong>학돌랩</strong> · 제작 senvip</span>
-      <span>v0.1.21</span>
+      <span>v0.1.22</span>
     </footer>
     <div class="modal-backdrop is-hidden" id="helpModal" role="presentation">
       <section class="help-modal" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
@@ -1139,20 +1139,7 @@ app.innerHTML = `
             <span class="help-step">02</span>
             <div>
               <h3 id="helpDownloadTitle" tabindex="-1">엑셀 파일이 있다면 에듀파인에서 내려받아요</h3>
-              <p>아래 두 방법 중 하나로 <strong>세입 자료 1개 + 세출 자료 1개</strong>를 준비하면 됩니다. 파일명보다 파일 안의 항목과 코드를 확인해 자동 판별합니다.</p>
-
-              <div class="help-method">
-                <div class="help-method-title"><span class="help-method-badge">마감</span><span>[세입실적] + [성질별 세출실적]</span></div>
-                <div class="help-path">학교회계 <b>›</b> 예산결산 <b>›</b> 결산현황 <b>›</b> 집행실적 <b>›</b> <strong>엑셀저장(마감)</strong></div>
-                <div class="help-file-grid">
-                  <div><strong>[세입실적] 탭</strong><span>학교운영경비 계산용</span></div>
-                  <div><strong>[성질별 세출실적] 탭</strong><span>일반업무추진비 계산용</span></div>
-                </div>
-                <figure class="help-figure">
-                  <img src="./assets/edufine-download-guide.png" alt="에듀파인 집행실적 엑셀저장 마감 화면에서 세입실적과 성질별 세출실적 탭 및 엑셀저장 위치를 표시한 예시 화면" />
-                  <figcaption>집행실적 화면에서 <strong>세입실적</strong>과 <strong>성질별 세출실적</strong>을 각각 선택해 엑셀로 저장하세요.</figcaption>
-                </figure>
-              </div>
+              <p>아래 두 방법 중 하나로 <strong>세입 자료 1개 + 세출 자료 1개</strong>를 준비하면 됩니다. <strong>마감 전에도 내려받을 수 있는 실시간 자료(201·104)를 먼저 안내합니다.</strong> 파일명보다 파일 안의 항목과 코드를 확인해 자동 판별합니다.</p>
 
               <div class="help-method">
                 <div class="help-method-title"><span class="help-method-badge">실시간</span><span>자료코드 201 + 104</span></div>
@@ -1165,6 +1152,20 @@ app.innerHTML = `
                 <figure class="help-figure">
                   <img src="./assets/edufine-realtime-201-104-guide.png" alt="에듀파인 집행실적 엑셀저장 실시간 화면에서 자료코드 201과 104 및 오른쪽 위 파일 버튼 위치를 보여주는 예시 화면" />
                   <figcaption><strong>201 목/원가목별 세입실적</strong>과 <strong>104 성질별 세출실적</strong>을 각각 선택해 오른쪽 위 <strong>[파일]</strong> 버튼으로 저장하세요.</figcaption>
+                </figure>
+              </div>
+
+              <div class="help-method">
+                <div class="help-method-title"><span class="help-method-badge">마감</span><span>[세입실적] + [성질별 세출실적]</span></div>
+                <div class="help-path">학교회계 <b>›</b> 예산결산 <b>›</b> 결산현황 <b>›</b> 집행실적 <b>›</b> <strong>엑셀저장(마감)</strong></div>
+                <div class="help-file-grid">
+                  <div><strong>[세입실적] 탭</strong><span>학교운영경비 계산용</span></div>
+                  <div><strong>[성질별 세출실적] 탭</strong><span>일반업무추진비 계산용</span></div>
+                </div>
+                <p><strong>마감 자료는 해당 월의 마감 처리가 완료되어야 내려받을 수 있습니다.</strong> 아직 마감하지 않았다면 위의 <strong>실시간 자료(201·104)</strong>를 이용해 주세요.</p>
+                <figure class="help-figure">
+                  <img src="./assets/edufine-download-guide.png" alt="에듀파인 집행실적 엑셀저장 마감 화면에서 세입실적과 성질별 세출실적 탭 및 엑셀저장 위치를 표시한 예시 화면" />
+                  <figcaption>집행실적 화면에서 <strong>세입실적</strong>과 <strong>성질별 세출실적</strong>을 각각 선택해 엑셀로 저장하세요.</figcaption>
                 </figure>
               </div>
 
@@ -1197,7 +1198,7 @@ app.innerHTML = `
           </section>
         </div>
         <div class="help-modal-foot">
-          <span>업추비 3% · v0.1.21</span>
+          <span>업추비 3% · v0.1.22</span>
           <button class="primary-button" id="helpConfirmButton" type="button">확인</button>
         </div>
       </section>
